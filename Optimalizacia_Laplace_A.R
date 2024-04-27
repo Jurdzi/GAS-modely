@@ -118,7 +118,6 @@ points(exp(par_mat_SP500[3,])/sqrt(2)*sqrt(1/exp(par_mat_SP500[4,])^2 + exp(par_
 points(par_mat_SP500[2,] + exp(par_mat_SP500[3,])/sqrt(2)*(1/exp(par_mat_SP500[4,]) - exp(par_mat_SP500[4,])) + 
          (exp(par_mat_SP500[3,])/sqrt(2)*sqrt(1/exp(par_mat_SP500[4,])^2 + exp(par_mat_SP500[4,])^2))*qalaplace(0.05),type = "l", col = "red")
 
-
 ################################################################################
 
 pocet_dat <- length(gold_data)
@@ -233,9 +232,9 @@ for (i in 0:11) {
 
 plot(par_mat_gold[1,],type = "l")
 points(par_mat_gold[2,] + exp(par_mat_gold[3,])/sqrt(2)*(1/exp(par_mat_gold[4,]) - exp(par_mat_gold[4,])),type = "l", col = "green")
-points(exp(par_mat_gold[3,])/2*sqrt(1/exp(par_mat_gold[4,])^2 + exp(par_mat_gold[4,])^2),type = "l", col = "red")
+points(exp(par_mat_gold[3,])/sqrt(2)*sqrt(1/exp(par_mat_gold[4,])^2 + exp(par_mat_gold[4,])^2),type = "l", col = "red")
 points(par_mat_gold[2,] + exp(par_mat_gold[3,])/sqrt(2)*(1/exp(par_mat_gold[4,]) - exp(par_mat_gold[4,]))+
-         (exp(par_mat_gold[3,])/2*sqrt(1/exp(par_mat_gold[4,])^2 + exp(par_mat_gold[4,])^2))*qalaplace(0.05),type = "l", col = "red")
+         (exp(par_mat_gold[3,])/sqrt(2)*sqrt(1/exp(par_mat_gold[4,])^2 + exp(par_mat_gold[4,])^2))*qalaplace(0.05),type = "l", col = "red")
 
 ################################################################################
 
@@ -351,9 +350,9 @@ for (i in 0:20) {
 
 plot(par_mat_btc[1,],type = "l")
 points(par_mat_btc[2,] + exp(par_mat_btc[3,])/sqrt(2)*(1/exp(par_mat_btc[4,]) - exp(par_mat_btc[4,])),type = "l", col = "green")
-points(exp(par_mat_btc[3,])/2*sqrt(1/exp(par_mat_btc[4,])^2 + exp(par_mat_btc[4,])^2),type = "l", col = "red")
+points(exp(par_mat_btc[3,])/sqrt(2)*sqrt(1/exp(par_mat_btc[4,])^2 + exp(par_mat_btc[4,])^2),type = "l", col = "red")
 points(par_mat_btc[2,] + exp(par_mat_btc[3,])/sqrt(2)*(1/exp(par_mat_btc[4,]) - exp(par_mat_btc[4,]))+
-         (exp(par_mat_btc[3,])/2*sqrt(1/exp(par_mat_btc[4,])^2 + exp(par_mat_btc[4,])^2))*qalaplace(0.05),type = "l", col = "red")
+         (exp(par_mat_btc[3,])/sqrt(2)*sqrt(1/exp(par_mat_btc[4,])^2 + exp(par_mat_btc[4,])^2))*qalaplace(0.05),type = "l", col = "red")
 
 ################################################################################
 
@@ -469,9 +468,9 @@ for (i in 0:12) {
 
 plot(par_mat_eurusd[1,],type = "l")
 points(par_mat_eurusd[2,] + exp(par_mat_eurusd[3,])/sqrt(2)*(1/exp(par_mat_eurusd[4,]) - exp(par_mat_eurusd[4,])),type = "l", col = "green")
-points(exp(par_mat_eurusd[3,])/2*sqrt(1/exp(par_mat_eurusd[4,])^2 + exp(par_mat_eurusd[4,])^2),type = "l", col = "red")
+points(exp(par_mat_eurusd[3,])/sqrt(2)*sqrt(1/exp(par_mat_eurusd[4,])^2 + exp(par_mat_eurusd[4,])^2),type = "l", col = "red")
 points(par_mat_eurusd[2,] + exp(par_mat_eurusd[3,])/sqrt(2)*(1/exp(par_mat_eurusd[4,]) - exp(par_mat_eurusd[4,]))+
-         (exp(par_mat_eurusd[3,])/2*sqrt(1/exp(par_mat_eurusd[4,])^2 + exp(par_mat_eurusd[4,])^2))*qalaplace(0.05),type = "l", col = "red")
+         (exp(par_mat_eurusd[3,])/sqrt(2)*sqrt(1/exp(par_mat_eurusd[4,])^2 + exp(par_mat_eurusd[4,])^2))*qalaplace(0.05),type = "l", col = "red")
 
 ###############################################################################
 
@@ -587,9 +586,9 @@ for (i in 0:11) {
 
 plot(par_mat_bonds[1,],type = "l")
 points(par_mat_bonds[2,] + exp(par_mat_bonds[3,])/sqrt(2)*(1/exp(par_mat_bonds[4,]) - exp(par_mat_bonds[4,])),type = "l", col = "green")
-points(exp(par_mat_bonds[3,])/2*sqrt(1/exp(par_mat_bonds[4,])^2 + exp(par_mat_bonds[4,])^2),type = "l", col = "red")
+points(exp(par_mat_bonds[3,])/sqrt(2)*sqrt(1/exp(par_mat_bonds[4,])^2 + exp(par_mat_bonds[4,])^2),type = "l", col = "red")
 points(par_mat_bonds[2,] + exp(par_mat_bonds[3,])/sqrt(2)*(1/exp(par_mat_bonds[4,]) - exp(par_mat_bonds[4,]))+
-         (exp(par_mat_bonds[3,])/2*sqrt(1/exp(par_mat_bonds[4,])^2 + exp(par_mat_bonds[4,])^2))*qalaplace(0.05),type = "l", col = "red")
+         (exp(par_mat_bonds[3,])/sqrt(2)*sqrt(1/exp(par_mat_bonds[4,])^2 + exp(par_mat_bonds[4,])^2))*qalaplace(0.05),type = "l", col = "red")
 
 ################################################################################
 
