@@ -78,7 +78,7 @@ for (i in 0:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,4), rep(0,4)), 
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,4), rep(0,4)), 
                          upper =  c(rep(1,4), rep(0.999999999,4)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
@@ -89,7 +89,7 @@ for (i in 0:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,4),rep(0,4)),
+                    LB = c(rep(0,4),rep(0,4)),
                     UB = c(rep(Inf,4),rep(0.99999,4)))
   
   pred_data <- 1:(504+okno) + i * okno
@@ -136,24 +136,12 @@ variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) 
 
 max(sqrt(variacia))
 # plot
-plot(x , type = "l",ylim= c(-0.02, 0.025))
+plot(x , type = "l")
 points(stred, type = "l", col = "green")
 points(sqrt(variacia), type = "l", col = "red")
 plot(nu, ylim= c(2,5))
 
-mu <- par_mat_SP500[2,]
-sigma <- exp(par_mat_SP500[3,]) 
-alfa <- 2/(1+exp(par_mat_SP500[4,]))-1
-nu <- exp(par_mat_SP500[5,])+2
-K <- gamma((nu+1)/2)/(sqrt(pi*nu)*gamma(nu/2))
-
-plot(par_mat_SP500[1,],type = "l")
-points(mu-(4*K*alfa*sigma*nu)/(nu-1),type = "l", col = "green")
-points(sigma*sqrt(nu*(1+3*alfa^2)/(nu-2)-(4*K*alfa*nu/(nu-1))^2),type = "l", col = "red")
-
 ###############################################################################
-
-okno <- 84 
 
 pocet_dat <- length(gold_data)
 
@@ -229,7 +217,7 @@ for (i in 0:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,4), rep(0,4)), 
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,4), rep(0,4)), 
                          upper =  c(rep(1,4), rep(0.999999999,4)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
@@ -240,7 +228,7 @@ for (i in 0:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,4),rep(0,4)),
+                    LB = c(rep(0,4),rep(0,4)),
                     UB = c(rep(Inf,4),rep(0.99999,4)))
   
   pred_data <- 1:(504+okno) + i * okno
@@ -264,27 +252,42 @@ for (i in 0:11) {
   
 }
 
+x <- par_mat_gold[1,]
 mu <- par_mat_gold[2,]
-sigma <- exp(par_mat_gold[3,]) 
-alfa <- 2/(1+exp(par_mat_gold[4,]))-1
-nu <- exp(par_mat_gold[5,])+2
-K <- gamma((nu+1)/2)/(sqrt(pi*nu)*gamma(nu/2))
+sigma <- exp(par_mat_gold[3,])
+alfa <- exp(par_mat_gold[4,])/(1+exp(par_mat_gold[4,]))
+nu <- exp(par_mat_gold[5,]) + 2
 
-plot(par_mat_gold[1,],type = "l")
-points(mu-4*K*alfa*sigma*nu/(nu-1),type = "l", col = "green")
-points(sigma*sqrt(nu*(1+3*alfa^2)/(nu-2)-(4*K*alfa*nu/(nu-1))^2),type = "l", col = "red")
+plot(x, type = "l")
+plot( mu, type = 'l')
+plot( sigma, type = 'l')
+plot( alfa, type = 'l')
+plot( nu, type = 'l')
+
+
+# existuje iba ak je nu > 1
+stred <- mu + sigma*(2*sqrt(nu)*(1-2*alfa)*gamma((nu-1)/2)/(sqrt(pi)*gamma(nu/2)))
+
+# existuje iba ak je nu > 2
+variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) / (sqrt(pi) *gamma(nu/2)) )
+
+max(sqrt(variacia))
+# plot
+plot(x , type = "l")
+points(stred, type = "l", col = "green")
+points(sqrt(variacia), type = "l", col = "red")
+plot(nu, ylim= c(2,5))
+
 
 ##############################################################################
-
-okno <- 122 
 
 pocet_dat <- length(btc_data)
 
 par_mat_btc <- c()
 
-for (i in 9:11) {
+for (i in 0:20) {
   print(i)
-  opt_data <- 1:730 + i * okno
+  opt_data <- 1:504 + i * okno
   
   opt_fun <- function(x){
     
@@ -352,7 +355,7 @@ for (i in 9:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,4), rep(0,4)), 
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,4), rep(0,4)), 
                          upper =  c(rep(1,4), rep(0.999999999,4)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
@@ -363,12 +366,12 @@ for (i in 9:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,4),rep(0,4)),
+                    LB = c(rep(0,4),rep(0,4)),
                     UB = c(rep(Inf,4),rep(0.99999,4)))
   
-  pred_data <- 1:(730+okno) + i * okno
+  pred_data <- 1:(504+okno) + i * okno
   
-  if(((730+okno) + i * okno) > pocet_dat){
+  if(((504+okno) + i * okno) > pocet_dat){
     pred_data <- pred_data[1]:pocet_dat
   }
   
@@ -381,24 +384,47 @@ for (i in 9:11) {
                  start_par = start_p,
                  out = TRUE)
   
-  pred_ind <- 731:ncol(a)
+  pred_ind <- 505:ncol(a)
   
   par_mat_btc <- cbind(par_mat_btc,a[,pred_ind])
   
 }
 
+x <- par_mat_btc[1,]
+mu <- par_mat_btc[2,]
+sigma <- exp(par_mat_btc[3,])
+alfa <- exp(par_mat_btc[4,])/(1+exp(par_mat_btc[4,]))
+nu <- exp(par_mat_btc[5,]) + 2
 
- #################################################################################
+plot(x, type = "l")
+plot( mu, type = 'l')
+plot( sigma, type = 'l')
+plot( alfa, type = 'l')
+plot( nu, type = 'l')
 
-okno <- 87 
+
+# existuje iba ak je nu > 1
+stred <- mu + sigma*(2*sqrt(nu)*(1-2*alfa)*gamma((nu-1)/2)/(sqrt(pi)*gamma(nu/2)))
+
+# existuje iba ak je nu > 2
+variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) / (sqrt(pi) *gamma(nu/2)) )
+
+max(sqrt(variacia))
+# plot
+plot(x , type = "l")
+points(stred, type = "l", col = "green")
+points(sqrt(variacia), type = "l", col = "red")
+plot(nu, ylim= c(2,5))
+
+#################################################################################
 
 pocet_dat <- length(eurusd_data)
 
 par_mat_eurusd <- c()
 
-for (i in 0:11) {
+for (i in 0:12) {
   print(i)
-  opt_data <- 1:520 + i * okno
+  opt_data <- 1:504 + i * okno
   
   opt_fun <- function(x){
     
@@ -466,7 +492,7 @@ for (i in 0:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,4), rep(0,4)), 
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,4), rep(0,4)), 
                          upper =  c(rep(1,4), rep(0.999999999,4)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
@@ -477,12 +503,12 @@ for (i in 0:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,4),rep(0,4)),
+                    LB = c(rep(0,4),rep(0,4)),
                     UB = c(rep(Inf,4),rep(0.99999,4)))
   
-  pred_data <- 1:(520+okno) + i * okno
+  pred_data <- 1:(504+okno) + i * okno
   
-  if(((520+okno) + i * okno) > pocet_dat){
+  if(((504+okno) + i * okno) > pocet_dat){
     pred_data <- pred_data[1]:pocet_dat
   }
   
@@ -495,21 +521,44 @@ for (i in 0:11) {
                  start_par = start_p,
                  out = TRUE)
   
-  pred_ind <- 521:ncol(a)
+  pred_ind <- 505:ncol(a)
   
   par_mat_eurusd <- cbind(par_mat_eurusd,a[,pred_ind])
 }
   
+x <- par_mat_eurusd[1,]
+mu <- par_mat_eurusd[2,]
+sigma <- exp(par_mat_eurusd[3,])
+alfa <- exp(par_mat_eurusd[4,])/(1+exp(par_mat_eurusd[4,]))
+nu <- exp(par_mat_eurusd[5,]) + 2
+
+plot(x, type = "l")
+plot( mu, type = 'l')
+plot( sigma, type = 'l')
+plot( alfa, type = 'l')
+plot( nu, type = 'l')
+
+
+# existuje iba ak je nu > 1
+stred <- mu + sigma*(2*sqrt(nu)*(1-2*alfa)*gamma((nu-1)/2)/(sqrt(pi)*gamma(nu/2)))
+
+# existuje iba ak je nu > 2
+variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) / (sqrt(pi) *gamma(nu/2)) )
+
+max(sqrt(variacia))
+# plot
+plot(x , type = "l")
+points(stred, type = "l", col = "green")
+points(sqrt(variacia), type = "l", col = "red")
+plot(nu, ylim= c(2,5))
 
 ###############################################################################
-
-okno <- 84 
 
 pocet_dat <- length(bonds_data)
 
 par_mat_bonds <- c()
 
-for (i in 11:11) {
+for (i in 0:11) {
   print(i)
   opt_data <- 1:504 + i * okno
   
@@ -579,7 +628,7 @@ for (i in 11:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,4), rep(0,4)), 
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,4), rep(0,4)), 
                          upper =  c(rep(1,4), rep(0.999999999,4)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
@@ -590,7 +639,7 @@ for (i in 11:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,4),rep(0,4)),
+                    LB = c(rep(0,4),rep(0,4)),
                     UB = c(rep(Inf,4),rep(0.99999,4)))
   
   pred_data <- 1:(504+okno) + i * okno
@@ -614,5 +663,35 @@ for (i in 11:11) {
   
 }
 
+x <- par_mat_bonds[1,]
+mu <- par_mat_bonds[2,]
+sigma <- exp(par_mat_bonds[3,])
+alfa <- exp(par_mat_bonds[4,])/(1+exp(par_mat_bonds[4,]))
+nu <- exp(par_mat_bonds[5,]) + 2
+
+plot(x, type = "l")
+plot( mu, type = 'l')
+plot( sigma, type = 'l')
+plot( alfa, type = 'l')
+plot( nu, type = 'l')
+
+
+# existuje iba ak je nu > 1
+stred <- mu + sigma*(2*sqrt(nu)*(1-2*alfa)*gamma((nu-1)/2)/(sqrt(pi)*gamma(nu/2)))
+
+# existuje iba ak je nu > 2
+variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) / (sqrt(pi) *gamma(nu/2)) )
+
+max(sqrt(variacia))
+# plot
+plot(x , type = "l")
+points(stred, type = "l", col = "green")
+points(sqrt(variacia), type = "l", col = "red")
+plot(nu, ylim= c(2,5))
+
+
+################################################################################
+
 save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_SST.RData")
 
+load("opt_SST.RData")

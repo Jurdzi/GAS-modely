@@ -1,4 +1,4 @@
-# Optimalizacia
+ # Optimalizacia
 
 okno <- 84 
 
@@ -79,7 +79,7 @@ for (i in 0:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,5), rep(0,5)), 
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,5), rep(0,5)), 
                          upper =  c(rep(1,5), rep(0.99999,5)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
@@ -90,7 +90,7 @@ for (i in 0:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,5),rep(0,5)),
+                    LB = c(rep(0,5),rep(0,5)),
                     UB = c(rep(Inf,5),rep(0.99999,5)))
   
   pred_data <- 1:(504+okno) + i * okno
@@ -117,27 +117,35 @@ for (i in 0:11) {
 mu <- par_mat_SP500[2,]
 sigma <- exp(par_mat_SP500[3,]) 
 alfa <- exp(par_mat_SP500[4,])/(1+exp(par_mat_SP500[4,]))
-
-nu_1 <- exp(par_mat_SP500[5,])+2
-nu_2 <- exp(par_mat_SP500[5,])+2
+nu_1 <- exp(par_mat_SP500[5,])
+nu_2 <- exp(par_mat_SP500[6,])
 K_1 <- gamma((nu_1+1)/2)/(sqrt(pi*nu_1)*gamma(nu_1/2))
 K_2 <- gamma((nu_2+1)/2)/(sqrt(pi*nu_2)*gamma(nu_2/2))
 B <- alfa*K_1+(1-alfa)*K_2
 alfa_h <- alfa*K_1/(alfa*K_1+(1-alfa)*K_2)
 
+plot(mu)
+plot(sigma)
+plot(alfa)
+plot(nu_1, ylim = c(0,5))
+plot(nu_2, ylim = c(0,5))
+
+#ak je nu > 1
+stredna <- 4*B*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)^2*nu_2/(nu_2-1))
+#ak je nu > 2
+variacia <- 4*(alfa*alfa_h^2*nu_1/(nu_1-2)+(1-alfa)*(1-alfa_h)^2*nu_2/(nu_2-2))-16*B^2*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)*nu_2/(nu_2-1))^2
+  
 plot(par_mat_SP500[1,],type = "l")
-points(4*B*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)^2*nu_2/(nu_2-1)),type = "l", col = "green")
-points(sqrt(4*(alfa*alfa_h^2*nu_1/(nu_1-2)+(1-alfa)*(1-alfa_h)^2*nu_2/(nu_2-2))-16*B^2*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)*nu_2/(nu_2-1))^2) , type = "l", col = "red")
+points(stredna ,type = "l", col = "green")
+points(sqrt(variacia), type = "l", col = "red")
 
 ###############################################################################
-
-okno <- 84 
 
 pocet_dat <- length(gold_data)
 
 par_mat_gold <- c()
 
-for (i in 1:11) {
+for (i in 0:11) {
   
   print(i)
   
@@ -210,7 +218,7 @@ for (i in 1:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,5), rep(0,5)), 
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,5), rep(0,5)), 
                          upper =  c(rep(1,5), rep(0.99999,5)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
@@ -221,7 +229,7 @@ for (i in 1:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,5),rep(0,5)),
+                    LB = c(rep(0,5),rep(0,5)),
                     UB = c(rep(Inf,5),rep(0.99999,5)))
   
   pred_data <- 1:(504+okno) + i * okno
@@ -245,20 +253,36 @@ for (i in 1:11) {
   
 }
 
+mu <- par_mat_SP500[2,]
+sigma <- exp(par_mat_SP500[3,]) 
+alfa <- exp(par_mat_SP500[4,])/(1+exp(par_mat_SP500[4,]))
+nu_1 <- exp(par_mat_SP500[5,])
+nu_2 <- exp(par_mat_SP500[5,])
+K_1 <- gamma((nu_1+1)/2)/(sqrt(pi*nu_1)*gamma(nu_1/2))
+K_2 <- gamma((nu_2+1)/2)/(sqrt(pi*nu_2)*gamma(nu_2/2))
+B <- alfa*K_1+(1-alfa)*K_2
+alfa_h <- alfa*K_1/(alfa*K_1+(1-alfa)*K_2)
+
+#ak je nu > 1
+stredna <- 4*B*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)^2*nu_2/(nu_2-1))
+#ak je nu > 2
+variacia <- 4*(alfa*alfa_h^2*nu_1/(nu_1-2)+(1-alfa)*(1-alfa_h)^2*nu_2/(nu_2-2))-16*B^2*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)*nu_2/(nu_2-1))^2
+
+plot(par_mat_SP500[1,],type = "l")
+points(stredna ,type = "l", col = "green")
+points(sqrt(variacia), type = "l", col = "red")
 
 ###############################################################################
-
-okno <- 122 
 
 pocet_dat <- length(btc_data)
 
 par_mat_btc <- c()
 
-for (i in 0:11) {
+for (i in 0:20) {
   
   print(i)
   
-  opt_data <- 1:730 + i * okno
+  opt_data <- 1:504 + i * okno
   
   opt_fun <- function(x){
     
@@ -327,7 +351,7 @@ for (i in 0:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,5), rep(0,5)), 
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,5), rep(0,5)), 
                          upper =  c(rep(1,5), rep(0.99999,5)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
@@ -338,12 +362,12 @@ for (i in 0:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,5),rep(0,5)),
+                    LB = c(rep(0,5),rep(0,5)),
                     UB = c(rep(Inf,5),rep(0.99999,5)))
   
-  pred_data <- 1:(730+okno) + i * okno
+  pred_data <- 1:(504+okno) + i * okno
   
-  if(((730+okno) + i * okno) > pocet_dat){
+  if(((504+okno) + i * okno) > pocet_dat){
     pred_data <- pred_data[1]:pocet_dat
   }
   
@@ -356,7 +380,7 @@ for (i in 0:11) {
                  start_par = start_p,
                  out = TRUE)
   
-  pred_ind <- 731:ncol(a)
+  pred_ind <- 505:ncol(a)
   
   par_mat_btc <- cbind(par_mat_btc,a[,pred_ind])
   
@@ -364,17 +388,15 @@ for (i in 0:11) {
 
 ###############################################################################
 
-okno <- 87 
-
 pocet_dat <- length(eurusd_data)
 
 par_mat_eurusd <- c()
 
-for (i in 0:11) {
+for (i in 0:12) {
   
   print(i)
   
-  opt_data <- 1:520 + i * okno
+  opt_data <- 1:504 + i * okno
   
   opt_fun <- function(x){
     
@@ -443,7 +465,7 @@ for (i in 0:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,5), rep(0,5)), 
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,5), rep(0,5)), 
                          upper =  c(rep(1,5), rep(0.99999,5)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
@@ -454,12 +476,12 @@ for (i in 0:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,5),rep(0,5)),
+                    LB = c(rep(0,5),rep(0,5)),
                     UB = c(rep(Inf,5),rep(0.99999,5)))
   
-  pred_data <- 1:(520+okno) + i * okno
+  pred_data <- 1:(504+okno) + i * okno
   
-  if(((520+okno) + i * okno) > pocet_dat){
+  if(((504+okno) + i * okno) > pocet_dat){
     pred_data <- pred_data[1]:pocet_dat
   }
   
@@ -472,7 +494,7 @@ for (i in 0:11) {
                  start_par = start_p,
                  out = TRUE)
   
-  pred_ind <- 521:ncol(a)
+  pred_ind <- 505:ncol(a)
   
   par_mat_eurusd <- cbind(par_mat_eurusd,a[,pred_ind])
   
@@ -480,13 +502,11 @@ for (i in 0:11) {
 
 ###############################################################################
 
-okno <- 84 
-
 pocet_dat <- length(bonds_data)
 
 par_mat_bonds <- c()
 
-for (i in 0:0) {
+for (i in 0:11) {
   
   print(i)
   
@@ -559,7 +579,7 @@ for (i in 0:0) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,5), rep(0,5)), 
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,5), rep(0,5)), 
                          upper =  c(rep(1,5), rep(0.99999,5)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
@@ -570,7 +590,7 @@ for (i in 0:0) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,5),rep(0,5)),
+                    LB = c(rep(0,5),rep(0,5)),
                     UB = c(rep(Inf,5),rep(0.99999,5)))
   
   pred_data <- 1:(504+okno) + i * okno
@@ -594,5 +614,6 @@ for (i in 0:0) {
   
 }
 
-save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, file = "opt_AST.RData")
+save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_AST.RData")
 
+load("opt_AST.RData")
