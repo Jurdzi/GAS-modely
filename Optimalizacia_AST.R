@@ -253,15 +253,21 @@ for (i in 0:11) {
   
 }
 
-mu <- par_mat_SP500[2,]
-sigma <- exp(par_mat_SP500[3,]) 
-alfa <- exp(par_mat_SP500[4,])/(1+exp(par_mat_SP500[4,]))
-nu_1 <- exp(par_mat_SP500[5,])
-nu_2 <- exp(par_mat_SP500[5,])
+mu <- par_mat_gold[2,]
+sigma <- exp(par_mat_gold[3,]) 
+alfa <- exp(par_mat_gold[4,])/(1+exp(par_mat_gold[4,]))
+nu_1 <- exp(par_mat_gold[5,])
+nu_2 <- exp(par_mat_gold[6,])
 K_1 <- gamma((nu_1+1)/2)/(sqrt(pi*nu_1)*gamma(nu_1/2))
 K_2 <- gamma((nu_2+1)/2)/(sqrt(pi*nu_2)*gamma(nu_2/2))
 B <- alfa*K_1+(1-alfa)*K_2
 alfa_h <- alfa*K_1/(alfa*K_1+(1-alfa)*K_2)
+
+plot(mu)
+plot(sigma)
+plot(alfa)
+plot(nu_1, ylim = c(0,5))
+plot(nu_2, ylim = c(0,5))
 
 #ak je nu > 1
 stredna <- 4*B*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)^2*nu_2/(nu_2-1))
@@ -386,6 +392,31 @@ for (i in 0:20) {
   
 }
 
+mu <- par_mat_btc[2,]
+sigma <- exp(par_mat_btc[3,]) 
+alfa <- exp(par_mat_btc[4,])/(1+exp(par_mat_btc[4,]))
+nu_1 <- exp(par_mat_btc[5,])
+nu_2 <- exp(par_mat_btc[6,])
+K_1 <- gamma((nu_1+1)/2)/(sqrt(pi*nu_1)*gamma(nu_1/2))
+K_2 <- gamma((nu_2+1)/2)/(sqrt(pi*nu_2)*gamma(nu_2/2))
+B <- alfa*K_1+(1-alfa)*K_2
+alfa_h <- alfa*K_1/(alfa*K_1+(1-alfa)*K_2)
+
+plot(mu)
+plot(sigma)
+plot(alfa)
+plot(nu_1, ylim = c(0,5))
+plot(nu_2, ylim = c(0,5))
+
+#ak je nu > 1
+stredna <- 4*B*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)^2*nu_2/(nu_2-1))
+#ak je nu > 2
+variacia <- 4*(alfa*alfa_h^2*nu_1/(nu_1-2)+(1-alfa)*(1-alfa_h)^2*nu_2/(nu_2-2))-16*B^2*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)*nu_2/(nu_2-1))^2
+
+plot(par_mat_SP500[1,],type = "l")
+points(stredna ,type = "l", col = "green")
+points(sqrt(variacia), type = "l", col = "red")
+
 ###############################################################################
 
 pocet_dat <- length(eurusd_data)
@@ -499,6 +530,31 @@ for (i in 0:12) {
   par_mat_eurusd <- cbind(par_mat_eurusd,a[,pred_ind])
   
 }
+
+mu <- par_mat_eurusd[2,]
+sigma <- exp(par_mat_eurusd[3,]) 
+alfa <- exp(par_mat_eurusd[4,])/(1+exp(par_mat_eurusd[4,]))
+nu_1 <- exp(par_mat_eurusd[5,])
+nu_2 <- exp(par_mat_eurusd[6,])
+K_1 <- gamma((nu_1+1)/2)/(sqrt(pi*nu_1)*gamma(nu_1/2))
+K_2 <- gamma((nu_2+1)/2)/(sqrt(pi*nu_2)*gamma(nu_2/2))
+B <- alfa*K_1+(1-alfa)*K_2
+alfa_h <- alfa*K_1/(alfa*K_1+(1-alfa)*K_2)
+
+plot(mu)
+plot(sigma)
+plot(alfa)
+plot(nu_1, ylim = c(0,5))
+plot(nu_2, ylim = c(0,5))
+
+#ak je nu > 1
+stredna <- 4*B*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)^2*nu_2/(nu_2-1))
+#ak je nu > 2
+variacia <- 4*(alfa*alfa_h^2*nu_1/(nu_1-2)+(1-alfa)*(1-alfa_h)^2*nu_2/(nu_2-2))-16*B^2*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)*nu_2/(nu_2-1))^2
+
+plot(par_mat_SP500[1,],type = "l")
+points(stredna ,type = "l", col = "green")
+points(sqrt(variacia), type = "l", col = "red")
 
 ###############################################################################
 
@@ -614,6 +670,32 @@ for (i in 0:11) {
   
 }
 
+mu <- par_mat_bonds[2,]
+sigma <- exp(par_mat_bonds[3,]) 
+alfa <- exp(par_mat_bonds[4,])/(1+exp(par_mat_bonds[4,]))
+nu_1 <- exp(par_mat_bonds[5,])
+nu_2 <- exp(par_mat_bonds[6,])
+K_1 <- gamma((nu_1+1)/2)/(sqrt(pi*nu_1)*gamma(nu_1/2))
+K_2 <- gamma((nu_2+1)/2)/(sqrt(pi*nu_2)*gamma(nu_2/2))
+B <- alfa*K_1+(1-alfa)*K_2
+alfa_h <- alfa*K_1/(alfa*K_1+(1-alfa)*K_2)
+
+plot(mu)
+plot(sigma)
+plot(alfa)
+plot(nu_1, ylim = c(0,5))
+plot(nu_2, ylim = c(0,5))
+
+#ak je nu > 1
+stredna <- 4*B*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)^2*nu_2/(nu_2-1))
+#ak je nu > 2
+variacia <- 4*(alfa*alfa_h^2*nu_1/(nu_1-2)+(1-alfa)*(1-alfa_h)^2*nu_2/(nu_2-2))-16*B^2*(-alfa_h^2*nu_1/(nu_1-1)+(1-alfa_h)*nu_2/(nu_2-1))^2
+
+plot(par_mat_SP500[1,],type = "l")
+points(stredna ,type = "l", col = "green")
+points(sqrt(variacia), type = "l", col = "red")
+
+################################################################################
 save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_AST.RData")
 
 load("opt_AST.RData")
