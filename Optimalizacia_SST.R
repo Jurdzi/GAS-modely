@@ -134,13 +134,25 @@ stred <- mu + sigma*(2*sqrt(nu)*(1-2*alfa)*gamma((nu-1)/2)/(sqrt(pi)*gamma(nu/2)
 # existuje iba ak je nu > 2
 variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) / (sqrt(pi) *gamma(nu/2)) )
 
+quantile <- rep(0,length(x))
+for(i in 1:length(x)){
+  if(x[i] <= mu[i]){
+    quantile[i] <- mu[i] + 2*alfa[i]*sigma[i]*K_func(nu[i])*qt(0.05/(2*alfa[i]), df = nu[i])
+  }else{
+    quantile[i] <- mu[i] + 2*(1-alfa[i])*sigma[i]*K_func(nu[i])*qt( (0.05+1-2*alfa[i]) / (2*(1-alfa[i])), df = nu[i] )
+  }
+}
+
+#quantile <- mu + 2*alfa*sigma*K_func(nu)*qt(0.05/(2*alfa), df = nu)
+#quantile <- mu + 2*(1-alfa)*sigma*K_func(nu)*qt( (0.01+1-2*alfa)/(2*(1-alfa)), df = nu )
+
 max(sqrt(variacia))
 # plot
 plot(x , type = "l")
 points(stred, type = "l", col = "green")
 points(sqrt(variacia), type = "l", col = "red")
-plot(nu, ylim= c(2,5))
-
+points(quantile, type = "l", col = "red")
+qtplot(nu, ylim= c(2,5))
 ###############################################################################
 
 pocet_dat <- length(gold_data)
@@ -271,11 +283,21 @@ stred <- mu + sigma*(2*sqrt(nu)*(1-2*alfa)*gamma((nu-1)/2)/(sqrt(pi)*gamma(nu/2)
 # existuje iba ak je nu > 2
 variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) / (sqrt(pi) *gamma(nu/2)) )
 
+quantile <- rep(0,length(x))
+for(i in 1:length(x)){
+  if(x[i] <= mu[i]){
+    quantile[i] <- mu[i] + 2*alfa[i]*sigma[i]*K_func(nu[i])*qt(0.05/(2*alfa[i]), df = nu[i])
+  }else{
+    quantile[i] <- mu[i] + 2*(1-alfa[i])*sigma[i]*K_func(nu[i])*qt( (0.05+1-2*alfa[i]) / (2*(1-alfa[i])), df = nu[i] )
+  }
+}
+
 max(sqrt(variacia))
 # plot
 plot(x , type = "l")
 points(stred, type = "l", col = "green")
 points(sqrt(variacia), type = "l", col = "red")
+points(quantile, type = "l", col = "red")
 plot(nu, ylim= c(2,5))
 
 
@@ -402,12 +424,20 @@ plot( sigma, type = 'l')
 plot( alfa, type = 'l')
 plot( nu, type = 'l')
 
-
 # existuje iba ak je nu > 1
 stred <- mu + sigma*(2*sqrt(nu)*(1-2*alfa)*gamma((nu-1)/2)/(sqrt(pi)*gamma(nu/2)))
 
 # existuje iba ak je nu > 2
 variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) / (sqrt(pi) *gamma(nu/2)) )
+
+quantile <- rep(0,length(x))
+for(i in 1:length(x)){
+  if(x[i] <= mu[i]){
+    quantile[i] <- mu[i] + 2*alfa[i]*sigma[i]*K_func(nu[i])*qt(0.05/(2*alfa[i]), df = nu[i])
+  }else{
+    quantile[i] <- mu[i] + 2*(1-alfa[i])*sigma[i]*K_func(nu[i])*qt( (0.05+1-2*alfa[i]) / (2*(1-alfa[i])), df = nu[i] )
+  }
+}
 
 max(sqrt(variacia))
 # plot
@@ -545,6 +575,15 @@ stred <- mu + sigma*(2*sqrt(nu)*(1-2*alfa)*gamma((nu-1)/2)/(sqrt(pi)*gamma(nu/2)
 # existuje iba ak je nu > 2
 variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) / (sqrt(pi) *gamma(nu/2)) )
 
+quantile <- rep(0,length(x))
+for(i in 1:length(x)){
+  if(x[i] <= mu[i]){
+    quantile[i] <- mu[i] + 2*alfa[i]*sigma[i]*K_func(nu[i])*qt(0.05/(2*alfa[i]), df = nu[i])
+  }else{
+    quantile[i] <- mu[i] + 2*(1-alfa[i])*sigma[i]*K_func(nu[i])*qt( (0.05+1-2*alfa[i]) / (2*(1-alfa[i])), df = nu[i] )
+  }
+}
+
 max(sqrt(variacia))
 # plot
 plot(x , type = "l")
@@ -681,6 +720,15 @@ stred <- mu + sigma*(2*sqrt(nu)*(1-2*alfa)*gamma((nu-1)/2)/(sqrt(pi)*gamma(nu/2)
 
 # existuje iba ak je nu > 2
 variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) / (sqrt(pi) *gamma(nu/2)) )
+
+quantile <- rep(0,length(x))
+for(i in 1:length(x)){
+  if(x[i] <= mu[i]){
+    quantile[i] <- mu[i] + 2*alfa[i]*sigma[i]*K_func(nu[i])*qt(0.05/(2*alfa[i]), df = nu[i])
+  }else{
+    quantile[i] <- mu[i] + 2*(1-alfa[i])*sigma[i]*K_func(nu[i])*qt( (0.05+1-2*alfa[i]) / (2*(1-alfa[i])), df = nu[i] )
+  }
+}
 
 max(sqrt(variacia))
 # plot
