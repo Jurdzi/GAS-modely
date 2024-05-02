@@ -112,7 +112,7 @@ for (i in 0:11) {
 plot(par_mat_SP500[1,],type = "l")
 points(par_mat_SP500[2,],type = "l", col = "green")
 points(exp(par_mat_SP500[3,]),type = "l", col = "red")
-points(par_mat_SP500[2,] + exp(par_mat_SP500[3,])*qt(0.05, df=5),type= "l", col = "red")
+points(par_mat_SP500[2,] + exp(par_mat_SP500[3,])*qt(0.05, df=exp(par_mat_SP500[4,])),type= "l", col = "red")
 
 #############################################################################
 

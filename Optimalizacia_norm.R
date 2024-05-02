@@ -5,7 +5,7 @@ pocet_dat <- length(SP500_data)
 
 par_mat_SP500 <- c()
 
-for (i in 2:11) {
+for (i in 0:11) {
   print(i)
 
   opt_data <- 1:504 + i * okno

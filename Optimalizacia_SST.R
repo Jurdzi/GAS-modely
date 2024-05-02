@@ -1,12 +1,12 @@
 # Optimalizacia
 
-okno <- 84 
+okno <- 42 
 
 pocet_dat <- length(SP500_data)
 
 par_mat_SP500 <- c()
 
-for (i in 0:11) {
+for (i in 0:23) {
   print(i)
   opt_data <- 1:504 + i * okno
   
@@ -134,14 +134,6 @@ stred <- mu + sigma*(2*sqrt(nu)*(1-2*alfa)*gamma((nu-1)/2)/(sqrt(pi)*gamma(nu/2)
 # existuje iba ak je nu > 2
 variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) / (sqrt(pi) *gamma(nu/2)) )
 
-quantile <- rep(0,length(x))
-for(i in 1:length(x)){
-  if(x[i] <= mu[i]){
-    quantile[i] <- mu[i] + 2*alfa[i]*sigma[i]*K_func(nu[i])*qt(0.05/(2*alfa[i]), df = nu[i])
-  }else{
-    quantile[i] <- mu[i] + 2*(1-alfa[i])*sigma[i]*K_func(nu[i])*qt( (0.05+1-2*alfa[i]) / (2*(1-alfa[i])), df = nu[i] )
-  }
-}
 
 #quantile <- mu + 2*alfa*sigma*K_func(nu)*qt(0.05/(2*alfa), df = nu)
 #quantile <- mu + 2*(1-alfa)*sigma*K_func(nu)*qt( (0.01+1-2*alfa)/(2*(1-alfa)), df = nu )
@@ -151,9 +143,11 @@ max(sqrt(variacia))
 plot(x , type = "l")
 points(stred, type = "l", col = "green")
 points(sqrt(variacia), type = "l", col = "red")
-points(quantile, type = "l", col = "red")
+points(qSST(0.05,par_mat_SP500), type = "l", col = "red")
 qtplot(nu, ylim= c(2,5))
 ###############################################################################
+
+okno <- 84
 
 pocet_dat <- length(gold_data)
 
@@ -268,7 +262,7 @@ x <- par_mat_gold[1,]
 mu <- par_mat_gold[2,]
 sigma <- exp(par_mat_gold[3,])
 alfa <- exp(par_mat_gold[4,])/(1+exp(par_mat_gold[4,]))
-nu <- exp(par_mat_gold[5,]) + 2
+nu <- exp(par_mat_gold[5,]) 
 
 plot(x, type = "l")
 plot( mu, type = 'l')
@@ -283,21 +277,13 @@ stred <- mu + sigma*(2*sqrt(nu)*(1-2*alfa)*gamma((nu-1)/2)/(sqrt(pi)*gamma(nu/2)
 # existuje iba ak je nu > 2
 variacia <- sigma^2*(4*nu*(alfa^3 + (1-alfa)^3 ) * gamma(3/2) * gamma((nu-2)/2) / (sqrt(pi) *gamma(nu/2)) )
 
-quantile <- rep(0,length(x))
-for(i in 1:length(x)){
-  if(x[i] <= mu[i]){
-    quantile[i] <- mu[i] + 2*alfa[i]*sigma[i]*K_func(nu[i])*qt(0.05/(2*alfa[i]), df = nu[i])
-  }else{
-    quantile[i] <- mu[i] + 2*(1-alfa[i])*sigma[i]*K_func(nu[i])*qt( (0.05+1-2*alfa[i]) / (2*(1-alfa[i])), df = nu[i] )
-  }
-}
 
 max(sqrt(variacia))
 # plot
 plot(x , type = "l")
 points(stred, type = "l", col = "green")
 points(sqrt(variacia), type = "l", col = "red")
-points(quantile, type = "l", col = "red")
+points(qSST(0.95, par_mat_gold), type = "l", col = "red")
 plot(nu, ylim= c(2,5))
 
 

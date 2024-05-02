@@ -18,22 +18,12 @@ test_VaR <- function(data = NULL, quantile_func = NULL, percentile = NULL) {
     
   }else if(identical(quantile_func, qSST)){
     
-    x = data[1,]
-    mu = data[2,]
-    sigma = exp(data[3,])
-    alfa = exp(data[4,])
-    nu = exp(data[5,])
+    quantile <- quantile_func(percentile, data)
     
-    quantile <- rep(0,length(x))
+  }else{
     
-    for(i in 1:length(x)){
-      if(x[i] <= mu[i]){
-        quantile[i] <- mu[i] + 2*alfa[i]*sigma[i]*K_func(nu[i])*qt(percentile/(2*alfa[i]), df = nu[i])
-      }else{
-        quantile[i] <- mu[i] + 2*(1-alfa[i])*sigma[i]*K_func(nu[i])*qt( (percentile+1-2*alfa[i]) / (2*(1-alfa[i])), df = nu[i] )
-      }
-    }
-      
+    quantile <- quantile_func(percentile, data)
+    
   }
   
   if(percentile <= 0.5){
@@ -45,3 +35,5 @@ test_VaR <- function(data = NULL, quantile_func = NULL, percentile = NULL) {
   return(list(quantile = quantile, test = test))
   
 }
+
+

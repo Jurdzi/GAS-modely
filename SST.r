@@ -66,7 +66,7 @@ score_SST <- function(x,pars,h){
   
   score <- inv_inf_mat%*%grad
 
-  ll <- dens_SST(x = x, mu = mu, sigma = sigma, alpha = alfa, nu = nu,  logartihm = TRUE)
+  ll <- dens_SST(x = x, mu = mu, sigma = sigma, alfa = alfa, nu = nu,  logartihm = TRUE)
   
   return(list(score = score, ll = ll))
 }
