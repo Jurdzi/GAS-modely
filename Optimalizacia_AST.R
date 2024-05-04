@@ -1,12 +1,12 @@
  # Optimalizacia
 
-okno <- 42 
+okno <- 84 
 
 pocet_dat <- length(SP500_data)
 
 par_mat_SP500 <- c()
 
-for (i in 0:23) {
+for (i in 7:11) {
   
   print(i)
   
@@ -80,9 +80,9 @@ for (i in 0:23) {
   cl <- makeCluster(nCores)
   
   de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,5), rep(0,5)), 
-                         upper =  c(rep(1,5), rep(0.99999,5)), control = DEoptim.control(
-                           itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
-                           parallelType = 1,
+                         upper =  c(rep(0.3,5), rep(0.99999,5)), control = DEoptim.control(
+                           itermax = 500, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
+                           parallelType = 1, NP = 200,
                            cluster = cl,
                            packages = c("mvnfast","rlist","tidyr","tidyverse","reshape2","MASS","extraDistr"),
                            parVar = c("gas_model","score_AST","SP500_data", "ginv_2","opt_data","start_p",
@@ -114,19 +114,6 @@ for (i in 0:23) {
   
 }
 
-x <- par_mat_SP500[1,]
-mu <- par_mat_SP500[2,]
-sigma <- exp(par_mat_SP500[3,]) 
-alfa <- exp(par_mat_SP500[4,])/(1+exp(par_mat_SP500[4,]))
-nu_1 <- exp(par_mat_SP500[5,])
-nu_2 <- exp(par_mat_SP500[6,])
-
-plot(mu)
-plot(sigma)
-plot(alfa)
-plot(nu_1, ylim = c(0,5))
-plot(nu_2, ylim = c(0,5))
-
 plot(par_mat_SP500[1,],type = "l")
 points(qAST(0.05,par_mat_SP500), type = "l", col = "red")
 points(qAST(0.95,par_mat_SP500), type = "l", col = "red")
@@ -137,7 +124,7 @@ pocet_dat <- length(gold_data)
 
 par_mat_gold <- c()
 
-for (i in 0:23) {
+for (i in 0:11) {
   
   print(i)
   
@@ -211,9 +198,9 @@ for (i in 0:23) {
   cl <- makeCluster(nCores)
   
   de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,5), rep(0,5)), 
-                         upper =  c(rep(1,5), rep(0.99999,5)), control = DEoptim.control(
-                           itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
-                           parallelType = 1,
+                         upper =  c(rep(0.3,5), rep(0.99999,5)), control = DEoptim.control(
+                           itermax = 500, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
+                           parallelType = 1, NP = 200,
                            cluster = cl,
                            packages = c("mvnfast","rlist","tidyr","tidyverse","reshape2","MASS","extraDistr"),
                            parVar = c("gas_model","score_AST","gold_data", "ginv_2","opt_data","start_p",
@@ -245,7 +232,6 @@ for (i in 0:23) {
   
 }
 
-
 plot(par_mat_gold[1,],type = "l")
 points(qAST(0.05,par_mat_gold), type = "l", col = "red")
 points(qAST(0.95,par_mat_gold), type = "l", col = "red")
@@ -256,7 +242,7 @@ pocet_dat <- length(btc_data)
 
 par_mat_btc <- c()
 
-for (i in 41:41) {
+for (i in 0:20) {
   
   print(i)
   
@@ -330,9 +316,9 @@ for (i in 41:41) {
   cl <- makeCluster(nCores)
   
   de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,5), rep(0,5)), 
-                         upper =  c(rep(1,5), rep(0.99999,5)), control = DEoptim.control(
-                           itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
-                           parallelType = 1,
+                         upper =  c(rep(0.3,5), rep(0.99999,5)), control = DEoptim.control(
+                           itermax = 500, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
+                           parallelType = 1, NP = 200,
                            cluster = cl,
                            packages = c("mvnfast","rlist","tidyr","tidyverse","reshape2","MASS","extraDistr"),
                            parVar = c("gas_model","score_AST","btc_data", "ginv_2","opt_data","start_p",
@@ -374,7 +360,7 @@ pocet_dat <- length(eurusd_data)
 
 par_mat_eurusd <- c()
 
-for (i in 0:25) {
+for (i in 0:12) {
   
   print(i)
   
@@ -448,9 +434,9 @@ for (i in 0:25) {
   cl <- makeCluster(nCores)
   
   de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,5), rep(0,5)), 
-                         upper =  c(rep(1,5), rep(0.99999,5)), control = DEoptim.control(
-                           itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
-                           parallelType = 1,
+                         upper =  c(rep(0.3,5), rep(0.99999,5)), control = DEoptim.control(
+                           itermax = 500, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
+                           parallelType = 1, NP = 200,
                            cluster = cl,
                            packages = c("mvnfast","rlist","tidyr","tidyverse","reshape2","MASS","extraDistr"),
                            parVar = c("gas_model","score_AST","eurusd_data", "ginv_2","opt_data","start_p",
@@ -492,7 +478,7 @@ pocet_dat <- length(bonds_data)
 
 par_mat_bonds <- c()
 
-for (i in 20:23) {
+for (i in 0:11) {
   
   print(i)
   
@@ -566,9 +552,9 @@ for (i in 20:23) {
   cl <- makeCluster(nCores)
   
   de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,5), rep(0,5)), 
-                         upper =  c(rep(1,5), rep(0.99999,5)), control = DEoptim.control(
-                           itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
-                           parallelType = 1,
+                         upper =  c(rep(0.3,5), rep(0.99999,5)), control = DEoptim.control(
+                           itermax = 500, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
+                           parallelType = 1, NP = 200,
                            cluster = cl,
                            packages = c("mvnfast","rlist","tidyr","tidyverse","reshape2","MASS","extraDistr"),
                            parVar = c("gas_model","score_AST","bonds_data", "ginv_2","opt_data","start_p",
@@ -604,11 +590,6 @@ points(qAST(0.05,par_mat_bonds), type = "l", col = "red")
 points(qAST(0.95,par_mat_bonds), type = "l", col = "red")
 
 ################################################################################
-save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_AST.RData")
+save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_AST_n.RData")
 
-load("opt_AST.RData")
-
-
-save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_AST_new.RData")
-
-load("opt_AST_new.RData")
+load("opt_AST_n.RData")
