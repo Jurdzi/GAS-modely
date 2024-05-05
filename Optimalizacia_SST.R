@@ -76,10 +76,10 @@ for (i in 0:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,4), rep(-1,4)), 
-                         upper =  c(rep(1,4), rep(0.999999999,4)), control = DEoptim.control(
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,4), rep(0,4)), 
+                         upper =  c(rep(0.1,4), rep(0.999999999,4)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
-                           parallelType = 1,
+                           parallelType = 1, 
                            cluster = cl,
                            packages = c("mvnfast","rlist","tidyr","tidyverse","reshape2","MASS","extraDistr"),
                            parVar = c("gas_model","score_SST","SP500_data", "ginv_2","opt_data","start_p",
@@ -87,8 +87,8 @@ for (i in 0:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-1,4),rep(-1,4)),
-                    UB = c(rep(Inf,4),rep(0.99999,4)))
+                    LB = c(rep(0,4),rep(0,4)),
+                    UB = c(rep(0.1,4),rep(0.99999,4)))
   
   pred_data <- 1:(504+okno) + i * okno
   
@@ -132,8 +132,6 @@ points(qSST(0.95,par_mat_SP500), type = "l", col = "red")
 points(qSST(0.05,par_mat_SP500), type = "l", col = "red")
 
 ###############################################################################
-
-okno <- 84
 
 pocet_dat <- length(gold_data)
 
@@ -209,8 +207,8 @@ for (i in 0:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,4), rep(-1,4)), 
-                         upper =  c(rep(1,4), rep(0.999999999,4)), control = DEoptim.control(
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,4), rep(0,4)), 
+                         upper =  c(rep(0.1,4), rep(0.999999999,4)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
                            cluster = cl,
@@ -220,7 +218,7 @@ for (i in 0:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,4),rep(-1,4)),
+                    LB = c(rep(0,4),rep(0,4)),
                     UB = c(rep(Inf,4),rep(0.99999,4)))
   
   pred_data <- 1:(504+okno) + i * okno
@@ -230,7 +228,7 @@ for (i in 0:11) {
   }
   
   a <- gas_model(static_param = opt_norm$pars,               
-                 data = as.vector(SP500_data[pred_data]), 
+                 data = as.vector(gold_data[pred_data]), 
                  p = 1, 
                  q = 1, 
                  score_fun = score_SST,
@@ -336,7 +334,7 @@ for (i in 0:20) {
   cl <- makeCluster(nCores)
   
   de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,4), rep(0,4)), 
-                         upper =  c(rep(1,4), rep(0.999999999,4)), control = DEoptim.control(
+                         upper =  c(rep(0.1,4), rep(0.999999999,4)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
                            cluster = cl,
@@ -462,7 +460,7 @@ for (i in 0:12) {
   cl <- makeCluster(nCores)
   
   de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,4), rep(0,4)), 
-                         upper =  c(rep(1,4), rep(0.999999999,4)), control = DEoptim.control(
+                         upper =  c(rep(0.1,4), rep(0.999999999,4)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
                            cluster = cl,
@@ -586,8 +584,8 @@ for (i in 0:11) {
   nCores <- detectCores() - 2
   cl <- makeCluster(nCores)
   
-  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(-1,4), rep(-1,4)), 
-                         upper =  c(rep(1,4), rep(0.999999999,4)), control = DEoptim.control(
+  de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,4), rep(0,4)), 
+                         upper =  c(rep(0.1,4), rep(0.999999999,4)), control = DEoptim.control(
                            itermax = 300, strategy = 2, c = 0.2, p = 0.25, CR= 0.8, F = 1.2,
                            parallelType = 1,
                            cluster = cl,
@@ -597,7 +595,7 @@ for (i in 0:11) {
   
   opt_norm <- solnp(pars = de_opt_norm$optim$bestmem, 
                     fun = opt_fun,
-                    LB = c(rep(-Inf,4),rep(-1,4)),
+                    LB = c(rep(0,4),rep(0,4)),
                     UB = c(rep(Inf,4),rep(0.99999,4)))
   
   pred_data <- 1:(504+okno) + i * okno
