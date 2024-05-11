@@ -67,19 +67,9 @@ test_ES_t <- function(data = NULL, percentile = NULL) {
 #laplace
 test_ES_laplace <- function(data = NULL, percentile = NULL) {
   
-  ES_X <- rep(0,length(data[2,]))
-  
   if(percentile <= 0.5){
-    
-    for (i in 1:length(data[2,])) {
-      if(qlaplace(percentile) < data[2,i]){
-        ES_X[i] <- data[2,i] - exp(data[3,i]) * (1-log(2*percentile))
-      }else{
-        ES_X[i] <- data[2,i] - exp(data[3,i]) * (1-percentile) * (1-log(2*(1-percentile))) / percentile
-      }
       
-    }
-    
+    ES_X[i] <- data[2,] - exp(data[3,]) * (1-log(2*percentile))
     I <- ifelse(ES_X>data[1,], 1, 0)
     k <- sum(I)
     P <- extraDistr::plaplace(ES_X, data[2,], sqrt(2)*exp(data[3,]), lower.tail = TRUE)
@@ -88,14 +78,7 @@ test_ES_laplace <- function(data = NULL, percentile = NULL) {
     
   }else{
     
-      for (i in 1:length(data[2,])) {
-        if(qlaplace(percentile) < data[2,i]){
-          ES_X[i] <- data[2,i] + exp(data[3,i]) * percentile * (1-log(2*percentile)) / (1-percentile) 
-        }else{
-          ES_X[i] <- data[2,i] + exp(data[3,i]) * (1-log(2*(1-percentile)))
-        }
-      }
-    
+    ES_X[i] <- data[2,] + exp(data[3,]) * (1-log(2*(1-percentile)))
     I <- ifelse(ES_X<data[1,], 1, 0)
     k <- sum(I)
     P <- extraDistr::plaplace(ES_X, data[2,], sqrt(2)*exp(data[3,]), lower.tail = FALSE)
