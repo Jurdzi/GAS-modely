@@ -21,6 +21,6 @@ source("Laplace_A.r")
 source("Laplace.r")
 source("q_ST.r")
 source("test_VaR.r")
-
-load("data.RData")
+source("test_ES.r")
+source("test_nezavislosti.r")
 
