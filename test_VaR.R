@@ -10,11 +10,11 @@ test_VaR <- function(data = NULL, quantile_func = NULL, percentile = NULL) {
     
   }else if (identical(quantile_func, qlaplace)){
     
-    quantile <- quantile_func(percentile, data[2,], sqrt(2)*exp(data[3,]))
+    quantile <- quantile_func(percentile, data[2,], exp(data[3,]))
     
   }else if (identical(quantile_func, qalaplace)){
     
-    quantile <- quantile_func(percentile, data[2,], sqrt(2)*exp(data[3,]))
+    quantile <- quantile_func(percentile, data[2,], exp(data[3,]), exp(data[4,]))
     
   }else if(identical(quantile_func, qSST)){
     

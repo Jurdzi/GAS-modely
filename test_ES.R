@@ -1,3 +1,23 @@
+lossES <- function(data = NULL, ES = NULL, percentile = NULL){
+  
+  S <- rep(0, length(data))
+  if(percentile <= 0.5){
+    alfa <- percentile
+  }else{
+    alfa <- 1 - percentile
+  }
+  
+  for (i in 1:length(data)) {
+    if(data[i] <= ES[i]){
+      S[i] <- alfa*abs(ES[i]-data[i])
+    }else{
+      S[i] <- (1-alfa)*abs(ES[i]-data[i])
+    }
+  }
+  loss <- mean(S)
+  return(loss)
+}
+
 #norm 
 test_ES_norm <- function(data = NULL, percentile = NULL) {
   
@@ -28,7 +48,12 @@ test_ES_norm <- function(data = NULL, percentile = NULL) {
   
   LR_ind <- test_LR_ind(I)
   
-  return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  if(LR_uc >= 0.05 & LR_ind >= 0.05){
+    loss <- lossES(data[1,], ES_X, percentile)
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
+  }else{
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  }
 }
 
 #t
@@ -61,7 +86,12 @@ test_ES_t <- function(data = NULL, percentile = NULL) {
   
   LR_ind <- test_LR_ind(I)
   
-  return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  if(LR_uc >= 0.05 & LR_ind >= 0.05){
+    loss <- lossES(data[1,], ES_X, percentile)
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
+  }else{
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  }
 }
 
 #laplace
@@ -69,7 +99,7 @@ test_ES_laplace <- function(data = NULL, percentile = NULL) {
   
   if(percentile <= 0.5){
       
-    ES_X[i] <- data[2,] - exp(data[3,]) * (1-log(2*percentile))
+    ES_X <- data[2,] - exp(data[3,]) * (1-log(2*percentile))
     I <- ifelse(ES_X>data[1,], 1, 0)
     k <- sum(I)
     P <- extraDistr::plaplace(ES_X, data[2,], exp(data[3,]), lower.tail = TRUE)
@@ -78,7 +108,7 @@ test_ES_laplace <- function(data = NULL, percentile = NULL) {
     
   }else{
     
-    ES_X[i] <- data[2,] + exp(data[3,]) * (1-log(2*(1-percentile)))
+    ES_X <- data[2,] + exp(data[3,]) * (1-log(2*(1-percentile)))
     I <- ifelse(ES_X<data[1,], 1, 0)
     k <- sum(I)
     P <- extraDistr::plaplace(ES_X, data[2,], exp(data[3,]), lower.tail = FALSE)
@@ -94,7 +124,12 @@ test_ES_laplace <- function(data = NULL, percentile = NULL) {
   
   LR_ind <- test_LR_ind(I)
   
-  return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  if(LR_uc >= 0.05 & LR_ind >= 0.05){
+    loss <- lossES(data[1,], ES_X, percentile)
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
+  }else{
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  }
 }
 
 #A laplace 
@@ -143,7 +178,12 @@ test_ES_alaplace <- function(data = NULL, percentile = NULL) {
   
   LR_ind <- test_LR_ind(I)
   
-  return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  if(LR_uc >= 0.05 & LR_ind >= 0.05){
+    loss <- lossES(data[1,], ES_X, percentile)
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
+  }else{
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  }
 }
 
 
@@ -180,7 +220,7 @@ test_ES_AST <- function(data = NULL, percentile = NULL) {
     
     I <- ifelse(ES_X<data[1,], 1, 0)
     k <- sum(I)
-    P <- pAST(ES_X, mu = data[2,], sigma = exp(data[3,]), alfa = exp(data[4,]), nu_1 = exp(data[5,]), nu_2 = exp(data[6,]))
+    P <- 1 - pAST(ES_X, mu = data[2,], sigma = exp(data[3,]), alfa = exp(data[4,]), nu_1 = exp(data[5,]), nu_2 = exp(data[6,]))
     mu <- sum(P)
     sigma <- sqrt(sum(P*(1-P)))
   }
@@ -229,7 +269,7 @@ test_ES_SST <- function(data = NULL, percentile = NULL) {
     
     I <- ifelse(ES_X<data[1,], 1, 0)
     k <- sum(I)
-    P <- pSST(ES_X, mu = data[2,], sigma = exp(data[3,]), alfa = exp(data[4,]), nu = exp(data[5,]))
+    P <- 1 - pSST(ES_X, mu = data[2,], sigma = exp(data[3,]), alfa = exp(data[4,]), nu = exp(data[5,]))
     mu <- sum(P)
     sigma <- sqrt(sum(P*(1-P)))
   }
