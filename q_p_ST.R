@@ -46,9 +46,9 @@ pAST <- function(x, mu = NULL, sigma = NULL, alfa = NULL, nu_1 = NULL, nu_2 = NU
   
   for (i in 1:length(p)) {
     if(x[i] <= mu[i]){
-      p[i] <- 2*alfa[i] * pt( (x[i]-mu[i]) / (2*alfa[i]*sigma[i]*K_func(nu_1[i])) , nu_1[i])
+      p[i] <- 2*alfa[i] * pt( (x[i]-mu[i]) / (2*alfa[i]*sigma[i]*K_func(nu_1[i])) , df = nu_1[i])
     }else{
-      p[i] <- 2*(1-alfa[i]) * pt( (x[i]-mu[i]) / (2*(1-alfa[i])*sigma[i]*K_func(nu_2[i])) - 1 + 2*alfa[i] , nu_2[i])
+      p[i] <- 2*(1-alfa[i]) * pt( (x[i]-mu[i]) / (2*(1-alfa[i])*sigma[i]*K_func(nu_2[i])) , nu_2[i]) - 1 + 2*alfa[i]
     }
   }
   
@@ -63,7 +63,7 @@ pSST <- function(x, mu = NULL, sigma = NULL, alfa = NULL, nu = NULL){
     if(x[i] <= mu[i]){
       p[i] <- 2*alfa[i] * pt( (x[i]-mu[i]) / (2*alfa[i]*sigma[i]*K_func(nu[i])) , nu[i])
     }else{
-      p[i] <- 2*(1-alfa[i]) * pt( (x[i]-mu[i]) / (2*(1-alfa[i])*sigma[i]*K_func(nu[i])) - 1 + 2*alfa[i] , nu[i])
+      p[i] <- 2*(1-alfa[i]) * pt( (x[i]-mu[i]) / (2*(1-alfa[i])*sigma[i]*K_func(nu[i])) , nu[i]) - 1 + 2*alfa[i] 
     }
   }
   
