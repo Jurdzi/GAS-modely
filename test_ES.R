@@ -18,6 +18,33 @@ lossES <- function(data = NULL, ES = NULL, percentile = NULL){
   return(loss)
 }
 
+#pomocne funkcie ku t rozdeleniam
+T_nu <- function(x = NULL, nu = NULL){
+  T_n <- (nu + qt(x, df = nu) ^2) * dt(qt(x, df = nu),df = nu)
+  return(T_n)
+}
+
+h_AST <- function(data = NULL){
+  
+  sigma <- exp(data[3])
+  alfa <- exp(data[4])
+  nu_1 <- exp(data[5])
+  nu_2 <- exp(data[6])
+  
+  h <- -4*sigma * ( (alfa*K_func(nu_1))^2 * nu_1 / (nu_1-1) - ((1-alfa)*K_func(nu_2))^2 * nu_2 / (nu_2-1) )
+  return(h)
+}
+
+h_SST <- function(data = NULL){
+  
+  sigma <- exp(data[3])
+  alfa <- exp(data[4])
+  nu <- exp(data[5])
+  
+  h <- -4*sigma * ( (alfa*K_func(nu))^2 * nu / (nu-1) - ((1-alfa)*K_func(nu))^2 * nu / (nu-1) )
+  return(h)
+}
+
 #norm 
 test_ES_norm <- function(data = NULL, percentile = NULL) {
   
@@ -61,7 +88,8 @@ test_ES_t <- function(data = NULL, percentile = NULL) {
   
   if(percentile <= 0.5){
     
-    ES_X <- data[2,] - exp(data[3,]) * (exp(data[4,]) + qt(percentile, df = exp(data[4,])) ^2) / (percentile*(exp(data[4,])-1)) * dt(qt(percentile, df = exp(data[4,])),df = exp(data[4,])) 
+    #ES_X <- data[2,] - exp(data[3,]) * (exp(data[4,]) + qt(percentile, df = exp(data[4,])) ^2) / (percentile*(exp(data[4,])-1)) * dt(qt(percentile, df = exp(data[4,])),df = exp(data[4,])) 
+    ES_X <- data[2,] - exp(data[3,]) / (percentile*(exp(data[4,])-1)) * T_nu(x = percentile, nu = exp(data[4,]))
     I <- ifelse(ES_X>data[1,], 1, 0)
     k <- sum(I)
     P <- pt( (ES_X-data[2,])/exp(data[3,]), df = exp(data[4,]), lower.tail = TRUE)
@@ -70,7 +98,8 @@ test_ES_t <- function(data = NULL, percentile = NULL) {
     
     }else{
       
-    ES_X <- data[2,] + exp(data[3,]) * (exp(data[4,]) + qt(percentile, df = exp(data[4,])) ^2) / ((1-percentile)*(exp(data[4,])-1)) * dt(qt(percentile, df = exp(data[4,])),df = exp(data[4,])) 
+    #ES_X <- data[2,] + exp(data[3,]) * (exp(data[4,]) + qt(percentile, df = exp(data[4,])) ^2) / ((1-percentile)*(exp(data[4,])-1)) * dt(qt(percentile, df = exp(data[4,])),df = exp(data[4,])) 
+    ES_X <- data[2,] + exp(data[3,])  / ((1-percentile)*(exp(data[4,])-1)) * T_nu(x = percentile, nu = exp(data[4,]))
     I <- ifelse(ES_X<data[1,], 1, 0)
     k <- sum(I)
     P <- pt( (ES_X-data[2,])/exp(data[3,]), df = exp(data[4,]), lower.tail = FALSE)
@@ -196,9 +225,9 @@ test_ES_AST <- function(data = NULL, percentile = NULL) {
     
     for (i in 1:length(data[1,])) {
       if(percentile <= exp(data[4,i])){
-        ES_X[i] <- data[2,i] - ( 2*exp(data[4,i]) )^2 * K_func(exp(data[5,i])) * exp(data[3,i]) * (exp(data[5,i]) + qt(percentile/(2*exp(data[4,i])), df = exp(data[5,i])) ^2) * dt(qt(percentile/(2*exp(data[4,i])), df = exp(data[5,i])),df = exp(data[5,i])) / (percentile*(exp(data[5,i])-1))
+        ES_X[i] <- data[2,i] - (2*exp(data[4,i]))^2 * K_func(exp(data[5,i])) * exp(data[3,i]) / (percentile*(exp(data[5,i])-1)) * T_nu(x = percentile/(2*exp(data[4,i])), nu = exp(data[5,i]))
       }else{
-        ES_X[i] <- data[2,i] - ( 2*(1-exp(data[4,i])) )^2 * K_func(exp(data[6,i])) * exp(data[3,i]) * (exp(data[6,i]) + qt((percentile+1-2*exp(data[4,i]))/(2*(1-exp(data[4,i]))), df = exp(data[6,i])) ^2) * dt(qt((percentile+1-2*exp(data[4,i]))/(2*(1-exp(data[4,i]))), df = exp(data[6,i])),df = exp(data[6,i])) / (percentile*(exp(data[6,i])-1)) - 4*exp(data[3,i])/percentile * ( ((exp(data[4,i])*K_func(exp(data[5,i])))^2*exp(data[5,i])) / ( exp(data[5,i])-1) - ( ((1-exp(data[4,i]))*K_func(exp(data[6,i])))^2*exp(data[6,i]) / ( exp(data[6,i])-1) ))  
+        ES_X[i] <- data[2,i] - ( 2*(1-exp(data[4,i])) )^2 * K_func(exp(data[6,i])) * exp(data[3,i]) / (percentile*(exp(data[6,i])-1)) * T_nu(x = (percentile+1-2*exp(data[4,i])) / (2*(1-exp(data[4,i]))), nu = exp(data[6,i]) ) - h_AST(data = data[,i] ) / percentile
       }
     }
     
@@ -212,9 +241,9 @@ test_ES_AST <- function(data = NULL, percentile = NULL) {
     
     for (i in 1:length(data[1,])) {
       if(percentile > exp(data[4,i])){
-        ES_X[i] <- data[2,i] + ( 2*exp(data[4,i]) )^2 * K_func(exp(data[6,i])) * exp(data[3,i]) * (exp(data[6,i]) + qt((percentile+1-2*exp(data[4,i]))/(2*(1-exp(data[4,i]))), df = exp(data[6,i])) ^2) * dt(qt((percentile+1-2*exp(data[4,i]))/(2*(1-exp(data[4,i]))), df = exp(data[6,i])),df = exp(data[6,i])) / ((1-percentile)*(exp(data[6,i])-1))
+        ES_X[i] <- data[2,i] + (2*exp(data[4,i]))^2 * K_func(exp(data[6,i])) * exp(data[3,i]) / ((1-percentile)*(exp(data[6,i])-1)) * T_nu(x = (percentile+1-2*exp(data[4,i])) / (2*(1-exp(data[4,i]))), nu = exp(data[6,i]))
       }else{
-        ES_X[i] <- data[2,i] + ( 2*(1-exp(data[4,i])) )^2 * K_func(exp(data[6,i])) * exp(data[3,i]) * (exp(data[6,i]) + qt(percentile/(2*exp(data[4,i])), df = exp(data[6,i])) ^2) * dt(qt(percentile/(2*exp(data[4,i])), df = exp(data[6,i])),df = exp(data[6,i])) / (percentile*(exp(data[6,i])-1)) + 4*exp(data[3,i])/percentile * ( ((exp(data[4,i])*K_func(exp(data[5,i])))^2*exp(data[5,i])) / ( exp(data[5,i])-1) - ( ((1-exp(data[4,i]))*K_func(exp(data[6,i])))^2*exp(data[6,i]) / ( exp(data[6,i])-1) ))  
+        ES_X[i] <- data[2,i] + ( 2*(1-exp(data[4,i])) )^2 * K_func(exp(data[5,i])) * exp(data[3,i]) / ((1-percentile)*(exp(data[5,i])-1)) * T_nu(x = percentile / (2*exp(data[4,])), nu = exp(data[5,i]) ) + h_AST(data = data[,i]) / (1-percentile)
       }
     }
     
@@ -245,9 +274,9 @@ test_ES_SST <- function(data = NULL, percentile = NULL) {
     
     for (i in 1:length(data[1,])) {
       if(percentile <= exp(data[4,i])){
-        ES_X[i] <- data[2,i] - ( 2*exp(data[4,i]) )^2 * K_func(exp(data[5,i])) * exp(data[3,i]) * (exp(data[5,i]) + qt(percentile/(2*exp(data[4,i])), df = exp(data[5,i])) ^2) * dt(qt(percentile/(2*exp(data[4,i])), df = exp(data[5,i])),df = exp(data[5,i])) / (percentile*(exp(data[5,i])-1))
+        ES_X[i] <- data[2,i] - (2*exp(data[4,i]))^2 * K_func(exp(data[5,i])) * exp(data[3,i]) / (percentile*(exp(data[5,i])-1)) * T_nu(x = percentile/(2*exp(data[4,i])), nu = exp(data[5,i]))
       }else{
-        ES_X[i] <- data[2,i] - ( 2*(1-exp(data[4,i])) )^2 * K_func(exp(data[5,i])) * exp(data[3,i]) * (exp(data[5,i]) + qt((percentile+1-2*exp(data[4,i]))/(2*(1-exp(data[4,i]))), df = exp(data[5,i])) ^2) * dt(qt((percentile+1-2*exp(data[4,i]))/(2*(1-exp(data[4,i]))), df = exp(data[5,i])),df = exp(data[5,i])) / (percentile*(exp(data[5,i])-1)) - 4*exp(data[3,i])/percentile * ( ((exp(data[4,i])*K_func(exp(data[5,i])))^2*exp(data[5,i])) / ( exp(data[5,i])-1) - ( ((1-exp(data[4,i]))*K_func(exp(data[5,i])))^2*exp(data[5,i]) / ( exp(data[5,i])-1) ))  
+        ES_X[i] <- data[2,i] - ( 2*(1-exp(data[4,i])) )^2 * K_func(exp(data[5,i])) * exp(data[3,i]) / (percentile*(exp(data[5,i])-1)) * T_nu(x = (percentile+1-2*exp(data[4,i])) / (2*(1-exp(data[4,i]))), nu = exp(data[5,i]) ) - h_SST(data = data[,i] ) / percentile
       }
     }
     
@@ -261,9 +290,9 @@ test_ES_SST <- function(data = NULL, percentile = NULL) {
     
     for (i in 1:length(data[1,])) {
       if(percentile > exp(data[4,i])){
-        ES_X[i] <- data[2,i] + ( 2*exp(data[4,i]) )^2 * K_func(exp(data[5,i])) * exp(data[3,i]) * (exp(data[5,i]) + qt((percentile+1-2*exp(data[4,i]))/(2*(1-exp(data[4,i]))), df = exp(data[5,i])) ^2) * dt(qt((percentile+1-2*exp(data[4,i]))/(2*(1-exp(data[4,i]))), df = exp(data[5,i])),df = exp(data[5,i])) / ((1-percentile)*(exp(data[5,i])-1))
+        ES_X[i] <- data[2,i] + (2*exp(data[4,i]))^2 * K_func(exp(data[5,i])) * exp(data[3,i]) / ((1-percentile)*(exp(data[5,i])-1)) * T_nu(x = (percentile+1-2*exp(data[4,i])) / (2*(1-exp(data[4,i]))), nu = exp(data[5,i]))
       }else{
-        ES_X[i] <- data[2,i] + ( 2*(1-exp(data[4,i])) )^2 * K_func(exp(data[5,i])) * exp(data[3,i]) * (exp(data[5,i]) + qt(percentile/(2*exp(data[4,i])), df = exp(data[5,i])) ^2) * dt(qt(percentile/(2*exp(data[4,i])), df = exp(data[5,i])),df = exp(data[5,i])) / (percentile*(exp(data[5,i])-1)) + 4*exp(data[3,i])/percentile * ( ((exp(data[4,i])*K_func(exp(data[5,i])))^2*exp(data[5,i])) / ( exp(data[5,i])-1) - ( ((1-exp(data[4,i]))*K_func(exp(data[5,i])))^2*exp(data[5,i]) / ( exp(data[5,i])-1) ))  
+        ES_X[i] <- data[2,i] + ( 2*(1-exp(data[4,i])) )^2 * K_func(exp(data[5,i])) * exp(data[3,i]) / ((1-percentile)*(exp(data[5,i])-1)) * T_nu(x = percentile / 2*exp(data[4,i]), nu = exp(data[5,i]) ) + h_SST(data = data[,i]) / (1-percentile)
       }
     }
     
@@ -284,3 +313,5 @@ test_ES_SST <- function(data = NULL, percentile = NULL) {
   
   return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
 }
+
+
