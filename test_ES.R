@@ -1,17 +1,10 @@
 lossES <- function(data = NULL, ES = NULL, percentile = NULL){
   
-  S <- rep(0, length(data))
-  if(percentile <= 0.5){
-    alfa <- percentile
-  }else{
-    alfa <- 1 - percentile
-  }
-  
   for (i in 1:length(data)) {
     if(data[i] <= ES[i]){
-      S[i] <- alfa*abs(ES[i]-data[i])
+      S[i] <- percentile*abs(ES[i]-data[i])
     }else{
-      S[i] <- (1-alfa)*abs(ES[i]-data[i])
+      S[i] <- (1-percentile)*abs(ES[i]-data[i])
     }
   }
   loss <- mean(S)
@@ -233,7 +226,6 @@ test_ES_AST <- function(data = NULL, percentile = NULL) {
     for (i in 1:length(x)) {
       if(percentile <= alfa[i]){
         ES_X[i] <- mu[i] - 4*alfa[i]^2 * K_func(nu_1[i]) * sigma[i] / (percentile*(nu_1[i]-1)) * T_nu(x = percentile/(2*alfa[i]), nu = nu_1[i])
-        #ES_X[i] <- mu[i] - (2*alfa[i]*K_func(nu_1[i]))^2*sigma[i]*nu_1[i] / (alfa[i]*(nu_1[i]-1)) * (1+qt(percentile/(2*alfa[i]), nu_1[i])/nu_1[i])^((1-nu_1[i])/2)
       }else{
         ES_X[i] <- mu[i] -  4*(1-alfa[i])^2 * K_func(nu_2[i]) * sigma[i] / (percentile*(nu_2[i]-1)) * T_nu(x = (percentile+1-2*alfa[i]) / (2*(1-alfa[i])), nu = nu_2[i] ) - h_AST(data = data[,i] ) / percentile
       }
@@ -270,7 +262,12 @@ test_ES_AST <- function(data = NULL, percentile = NULL) {
   
   LR_ind <- test_LR_ind(I)
   
-  return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  if(LR_uc >= 0.05 & LR_ind >= 0.05){
+    loss <- lossES(data[1,], ES_X, percentile)
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
+  }else{
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  }
 }
 
 #SST
@@ -325,5 +322,10 @@ test_ES_SST <- function(data = NULL, percentile = NULL) {
   
   LR_ind <- test_LR_ind(I)
   
-  return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  if(LR_uc >= 0.05 & LR_ind >= 0.05){
+    loss <- lossES(data[1,], ES_X, percentile)
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
+  }else{
+    return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
+  }
 }
