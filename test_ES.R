@@ -1,11 +1,20 @@
 lossES <- function(data = NULL, ES = NULL, percentile = NULL){
   
+  S <- rep(0,length(data))
+  
   for (i in 1:length(data)) {
-    if(data[i] <= ES[i]){
-      S[i] <- percentile*abs(ES[i]-data[i])
-    }else{
-      S[i] <- (1-percentile)*abs(ES[i]-data[i])
-    }
+    if(percentile <= 0.5){
+      if(ES[i] <= data[i]){
+        S[i] <- percentile*abs(ES[i]-data[i])
+      }else{
+        S[i] <- (1-percentile)*abs(ES[i]-data[i])
+      }
+    }else
+      if(data[i] <= ES[i]){
+        S[i] <- percentile*abs(ES[i]-data[i])
+      }else{
+        S[i] <- (1-percentile)*abs(ES[i]-data[i])
+      }
   }
   loss <- mean(S)
   return(loss)
