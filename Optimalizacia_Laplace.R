@@ -1,4 +1,5 @@
 # Optimalizacia
+load("data.RData")
 
 okno <- 84 
 
@@ -113,7 +114,7 @@ for (i in 0:11) {
 plot(par_mat_SP500[1,],type = "l")
 points(par_mat_SP500[2,],type = "l", col = "green")
 points(sqrt(2)*exp(par_mat_SP500[3,]),type = "l", col = "red")
-points(par_mat_SP500[2,] + sqrt(2)*exp(par_mat_SP500[3,])*qlaplace(0.05),type= "l",col = "red")
+points(qlaplace(0.05,par_mat_SP500[2,],exp(par_mat_SP500[3,])),type= "l",col = "red")
 
 ##############################################################################
 
@@ -227,7 +228,7 @@ for (i in 0:11) {
 plot(par_mat_gold[1,],type = "l")
 points(par_mat_gold[2,],type = "l", col = "green")
 points(sqrt(2)*exp(par_mat_gold[3,]),type = "l", col = "red")
-points(par_mat_gold[2,] + sqrt(2)*exp(par_mat_gold[3,])*qlaplace(0.05),type= "l",col = "red")
+points(qlaplace(0.05,par_mat_gold[2,],exp(par_mat_gold[3,])),type= "l",col = "red")
 
 ###############################################################################
 
@@ -342,7 +343,7 @@ for (i in 0:20) {
 plot(par_mat_btc[1,],type = "l")
 points(par_mat_btc[2,],type = "l", col = "green")
 points(sqrt(2)*exp(par_mat_btc[3,]),type = "l", col = "red")
-points(par_mat_btc[2,] + sqrt(2)*exp(par_mat_btc[3,])*qlaplace(0.05),type= "l",col = "red")
+points(qlaplace(0.05,par_mat_btc[2,],exp(par_mat_btc[3,])),type= "l",col = "red")
 
 ################################################################################
 
@@ -457,7 +458,7 @@ for (i in 0:12) {
 plot(par_mat_eurusd[1,],type = "l")
 points(par_mat_eurusd[2,],type = "l", col = "green")
 points(sqrt(2)*exp(par_mat_eurusd[3,]),type = "l", col = "red")
-points(par_mat_eurusd[2,] + sqrt(2)*exp(par_mat_eurusd[3,])*qlaplace(0.05),type= "l", col = "red")
+points(qlaplace(0.05,par_mat_eurusd[2,],exp(par_mat_eurusd[3,])),type= "l", col = "red")
 
 ################################################################################
 
@@ -572,10 +573,10 @@ for (i in 0:11) {
 plot(par_mat_bonds[1,],type = "l")
 points(par_mat_bonds[2,],type = "l", col = "green")
 points(sqrt(2)*exp(par_mat_bonds[3,]),type = "l", col = "red")
-points(par_mat_bonds[2,] + sqrt(2)*exp(par_mat_bonds[3,])*qlaplace(0.05),type= "l", col = "red")
+points(qlaplace(0.05,par_mat_bonds[2,],exp(par_mat_bonds[3,])),type= "l", col = "red")
 
 ################################################################################
 
 save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_Laplace.RData")
 
-load("opt_Laplace.RData")
+

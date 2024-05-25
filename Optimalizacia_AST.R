@@ -1,4 +1,5 @@
  # Optimalizacia
+load("data.RData")
 
 okno <- 84 
 
@@ -6,7 +7,7 @@ pocet_dat <- length(SP500_data)
 
 par_mat_SP500 <- c()
 
-for (i in 7:11) {
+for (i in 0:11) {
   
   print(i)
   
@@ -585,11 +586,11 @@ for (i in 0:11) {
   par_mat_bonds <- cbind(par_mat_bonds,a[,pred_ind])
 }
 
-plot(par_mat_bonds[1,], type = "l", col = "black",ylim=c(-0.5,0.5))
-points(qAST(0.05,par_mat_bonds), type = "l", col = "red")
+plot(par_mat_bonds[1,], type = "l", col = "black")
+points(qAST(0.01,par_mat_bonds), type = "l", col = "red")
 points(qAST(0.95,par_mat_bonds), type = "l", col = "red")
 
 ################################################################################
-save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_AST_n.RData")
+save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_AST.RData")
 
-load("opt_AST_n.RData")
+

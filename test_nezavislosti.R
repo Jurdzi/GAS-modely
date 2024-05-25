@@ -23,6 +23,6 @@ test_LR_ind <- function(I) {
   pi_11 <- N_11/(N_10+N_11)
   pi_s <- (N_01 + N_11)/(N_00 + N_10 + N_01 + N_11)
   
-  LR_ind <- pchisq( -2*( (1-pi_s)^N_0 * pi_s^N_1 / ( (1-pi_01)^N_00 * pi_01^N_01 * (1-pi_11)^N_10 * pi_11^N_11 )  ), df = 1, lower.tail = FALSE)
+  LR_ind <- pchisq( -2*log( (1-pi_s)^N_0 * pi_s^N_1 / ( (1-pi_01)^N_00 * pi_01^N_01 * (1-pi_11)^N_10 * pi_11^N_11 )  ), df = 1, lower.tail = FALSE)
   
 }

@@ -1,19 +1,19 @@
-lossES <- function(data = NULL, ES = NULL, percentile = NULL){
+lossES <- function(data = NULL, ES = NULL, P = NULL){
   
   S <- rep(0,length(data))
   
   for (i in 1:length(data)) {
-    if(percentile <= 0.5){
+    if(P[i] <= 0.5){
       if(ES[i] <= data[i]){
-        S[i] <- percentile*abs(ES[i]-data[i])
+        S[i] <- P[i]*abs(ES[i]-data[i])
       }else{
-        S[i] <- (1-percentile)*abs(ES[i]-data[i])
+        S[i] <- (1-P[i])*abs(ES[i]-data[i])
       }
     }else
       if(data[i] <= ES[i]){
-        S[i] <- percentile*abs(ES[i]-data[i])
+        S[i] <- P[i]*abs(ES[i]-data[i])
       }else{
-        S[i] <- (1-percentile)*abs(ES[i]-data[i])
+        S[i] <- (1-P[i])*abs(ES[i]-data[i])
       }
   }
   loss <- mean(S)
@@ -78,7 +78,7 @@ test_ES_norm <- function(data = NULL, percentile = NULL) {
   LR_ind <- test_LR_ind(I)
   
   if(LR_uc >= 0.05 & LR_ind >= 0.05){
-    loss <- lossES(data[1,], ES_X, percentile)
+    loss <- lossES(data[1,], ES_X, P)
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
   }else{
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
@@ -118,7 +118,7 @@ test_ES_t <- function(data = NULL, percentile = NULL) {
   LR_ind <- test_LR_ind(I)
   
   if(LR_uc >= 0.05 & LR_ind >= 0.05){
-    loss <- lossES(data[1,], ES_X, percentile)
+    loss <- lossES(data[1,], ES_X, P)
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
   }else{
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
@@ -156,7 +156,7 @@ test_ES_laplace <- function(data = NULL, percentile = NULL) {
   LR_ind <- test_LR_ind(I)
   
   if(LR_uc >= 0.05 & LR_ind >= 0.05){
-    loss <- lossES(data[1,], ES_X, percentile)
+    loss <- lossES(data[1,], ES_X, P)
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
   }else{
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
@@ -210,7 +210,7 @@ test_ES_alaplace <- function(data = NULL, percentile = NULL) {
   LR_ind <- test_LR_ind(I)
   
   if(LR_uc >= 0.05 & LR_ind >= 0.05){
-    loss <- lossES(data[1,], ES_X, percentile)
+    loss <- lossES(data[1,], ES_X, P)
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
   }else{
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
@@ -272,7 +272,7 @@ test_ES_AST <- function(data = NULL, percentile = NULL) {
   LR_ind <- test_LR_ind(I)
   
   if(LR_uc >= 0.05 & LR_ind >= 0.05){
-    loss <- lossES(data[1,], ES_X, percentile)
+    loss <- lossES(data[1,], ES_X, P)
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
   }else{
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))
@@ -332,7 +332,7 @@ test_ES_SST <- function(data = NULL, percentile = NULL) {
   LR_ind <- test_LR_ind(I)
   
   if(LR_uc >= 0.05 & LR_ind >= 0.05){
-    loss <- lossES(data[1,], ES_X, percentile)
+    loss <- lossES(data[1,], ES_X, P)
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, loss = loss, k = k))
   }else{
     return(list(LR_uc = LR_uc, LR_ind = LR_ind, k = k))

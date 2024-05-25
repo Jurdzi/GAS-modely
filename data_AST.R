@@ -1,5 +1,5 @@
 symbols <- c("^GSPC", "GC=F", "BTC-USD", "EURUSD=X","^TNX")
-getSymbols(symbols, from = "2018-01-01", to = "2024-01-01", auto.assign = TRUE)
+getSymbols(symbols, from = "2017-01-01", to = "2024-01-01", auto.assign = TRUE)
 
 
 ###########################
@@ -219,31 +219,4 @@ summary(ur.df(bonds_data, lags = 5, selectlags = "BIC", type = "none"))
 #testova statistika je mensia ako kriticka hodnota  => netreba diferencovat
 bonds_data <- as.numeric(bonds_data)
 
-save(SP500_data, gold_data, btc_data, eurusd_data, bonds_data, file = "data.RData")
-
-##############################################################################
-
-par(mfrow = c(5, 1), mar = c(4, 4, 2, 1), oma = c(1, 1, 1, 1))
-
-# Plot S&P 500
-plot(x = as.numeric(date_SP500[-length(date_SP500)]), y = SP500_data, col = "red", type = "l", ylim = c(min(SP500_data), max(SP500_data)), xlab = "", ylab = "", xaxt = 'n', main = "S&P 500")
-axis(1, at = as.Date(paste0(years, "-01-01")), labels = years, cex.axis = 0.85, las = 0)
-
-# Plot Gold
-plot(x = as.numeric(date_gold[-length(date_gold)]), y = gold_data, col = "red", type = "l", ylim = c(min(gold_data), max(gold_data)), xlab = "", ylab = "", xaxt = 'n', main = "Zlato")
-axis(1, at = as.Date(paste0(years, "-01-01")), labels = years, cex.axis = 0.85, las = 0)
-
-# Plot Bitcoin
-plot(x = as.numeric(date_btc[-length(date_btc)]), y = btc_data, col = "red", type = "l", ylim = c(min(btc_data), max(btc_data)), xlab = "", ylab = "", xaxt = 'n', main = "Bitcoin")
-axis(1, at = as.Date(paste0(years, "-01-01")), labels = years, cex.axis = 0.85, las = 0)
-
-# Plot EUR/USD
-plot(x = as.numeric(date_eurusd[-length(date_eurusd)]), y = eurusd_data, col = "red", type = "l", ylim = c(min(eurusd_data), max(eurusd_data)), xlab = "", ylab = "", xaxt = 'n', main = "EUR/USD")
-axis(1, at = as.Date(paste0(years, "-01-01")), labels = years, cex.axis = 0.85, las = 0)
-
-# Plot Bonds
-plot(x = as.numeric(date_bonds[-length(date_bonds)]), y = bonds_data, col = "red", type = "l", ylim = c(min(bonds_data), max(bonds_data)), xlab = "", ylab = "", xaxt = 'n', main = "Dlhopisy")
-axis(1, at = as.Date(paste0(years, "-01-01")), labels = years, cex.axis = 0.85, las = 0)
-
-# Reset the plotting area to default
-par(mfrow = c(1, 1))
+save(SP500_data, gold_data, btc_data, eurusd_data, bonds_data, file = "data_AST.RData")

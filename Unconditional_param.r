@@ -34,7 +34,12 @@ uncond_Laplace_A <- function(x, data){
 
 
 K_func <- function(x){
-  ret <- gamma((x+1)/2)/(sqrt(pi*x) *gamma(x/2))
+  
+  if(x > 300){
+    ret <- ((x-1)/(x-2))^(x/2)*sqrt( (x-2)/(2*exp(1)))/sqrt(pi*x)
+  }else {
+    ret <- gamma((x+1)/2)/(sqrt(pi*x) *gamma(x/2))
+  }
   return(ret)
 }
 
@@ -118,7 +123,6 @@ uncond_SST <- function(x, data){
   alfa = exp(x[3])/(1 + exp(x[3]))
   
   # nu
-  #nu = exp(x[4]) + 2
   nu = exp(x[4]) 
   
   lh <- dens_SST(x = data, mu = mu, sigma = sigma, alfa = alfa, nu = nu, logartihm = TRUE)

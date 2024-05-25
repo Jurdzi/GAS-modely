@@ -1,4 +1,6 @@
 # Optimalizacia
+load("data.RData")
+
 okno <- 84 
 
 pocet_dat <- length(SP500_data)
@@ -41,7 +43,7 @@ for (i in 0:11) {
   cl <- makeCluster(nCores)
   
   de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,2), rep(0,2)), 
-                         upper =  c(rep(1,2), rep(0.99999,2)), control = DEoptim.control(
+                         upper =  c(rep(1,2), rep(1,2)), control = DEoptim.control(
                            NP = 20*4, itermax = 200, strategy = 1, c = 0.2,
                            parallelType = 1,
                            cluster = cl,
@@ -77,7 +79,7 @@ for (i in 0:11) {
 plot(par_mat_SP500[1,],type = "l")
 points(par_mat_SP500[2,],type = "l", col = "green")
 points(exp(par_mat_SP500[3,]),type = "l", col = "red")
-points(par_mat_SP500[2,] + exp(par_mat_SP500[3,])*qnorm(0.05),type= "l", col = "red")
+points(qnorm(0.05,par_mat_SP500[2,], exp(par_mat_SP500[3,])),type= "l", col = "red")
 
 
 ############################################################################
@@ -100,7 +102,7 @@ for (i in 0:11) {
                     p = 1, 
                     q = 1, 
                     score_fun = score_norm,
-                    start_par = c(mean(gold_data[opt_data]), log( sqrt(var(gold_data[opt_data])) )),
+                    start_par = c(mean(gold_data[opt_data]), log( var(gold_data[opt_data]) )),
                     h = -1)
         },
         error=function(cond) {
@@ -158,7 +160,7 @@ for (i in 0:11) {
 plot(par_mat_gold[1,],type = "l")
 points(par_mat_gold[2,],type = "l", col = "green")
 points(exp(par_mat_gold[3,]),type = "l", col = "red")
-points(par_mat_gold[2,] + exp(par_mat_gold[3,])*qnorm(0.05),type= "l", col = "red")
+points(qnorm(0.05,par_mat_gold[2,],exp(par_mat_gold[3,])),type= "l", col = "red")
 
 
 ###############################################################################
@@ -167,7 +169,7 @@ pocet_dat <- length(btc_data)
 
 par_mat_btc <- c()
 
-for (i in 5:20) {
+for (i in 0:20) {
   print(i)
   
   opt_data <- 1:504 + i * okno
@@ -407,4 +409,4 @@ points(par_mat_bonds[2,] + exp(par_mat_bonds[3,])*qnorm(0.05),type= "l", col = "
 
 save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_norm.RData")
 
-load("opt_norm.RData")
+

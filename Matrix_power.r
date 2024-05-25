@@ -1,6 +1,7 @@
 # Inverzia semidefinetnej matice
 # Lubovolna mocnina matice 
 # Efektivne a rychle pocitanie pretoze mozeme pouzit QAQ^t rozklad
+# Tato funkcia je upravenou verziou funkci ginv z balicka MASS
 
 ginv_2 <- function (X, tol = sqrt(.Machine$double.eps), h = -1/2) {
     if (length(dim(X)) > 2L || !(is.numeric(X) || is.complex(X))) 

@@ -1,4 +1,5 @@
 # Optimalizacia
+load("data.RData")
 
 okno <- 84 
 
@@ -574,4 +575,4 @@ points(par_mat_bonds[2,] + exp(par_mat_bonds[3,])*qt(0.05, df=5),type= "l", col 
 
 save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_t.RData")
 
-load("opt_t.RData")
+

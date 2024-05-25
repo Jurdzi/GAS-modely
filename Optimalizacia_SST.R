@@ -1,4 +1,5 @@
 # Optimalizacia
+load("data.RData")
 
 okno <- 84 
 
@@ -514,7 +515,7 @@ pocet_dat <- length(bonds_data)
 
 par_mat_bonds <- c()
 
-for (i in 0:11) {
+for (i in 11:11) {
   print(i)
   opt_data <- 1:504 + i * okno
   
@@ -638,4 +639,4 @@ points(qSST(0.05,par_mat_bonds), type = "l", col = "red")
 
 save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_SST.RData")
 
-load("opt_SST.RData")
+

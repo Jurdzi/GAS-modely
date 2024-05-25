@@ -1,4 +1,4 @@
-# Optimalizacia
+load("data.RData")
 
 okno <- 84 
 
@@ -7,7 +7,7 @@ pocet_dat <- length(SP500_data)
 par_mat_SP500 <- c()
 
 for (i in 0:11) {
-  
+  print(i)
   opt_data <- 1:504 + i * okno
   
   opt_fun <- function(x){
@@ -78,7 +78,7 @@ for (i in 0:11) {
   
   de_opt_norm <- DEoptim(fn = opt_fun, lower = c(rep(0,3), rep(0,3)), 
                          upper =  c(rep(1,3), rep(0.99999,3)), control = DEoptim.control(
-                           itermax = 200, strategy = 1, c = 0.2,
+                           itermax = 200, strategy = 1, c = 0.2,  
                            parallelType = 1,
                            cluster = cl,
                            packages = c("LaplacesDemon","rlist","tidyr","tidyverse","reshape2","MASS"),
@@ -115,9 +115,7 @@ for (i in 0:11) {
 plot(par_mat_SP500[1,],type = "l")
 points(par_mat_SP500[2,] + exp(par_mat_SP500[3,])/sqrt(2)*(1/exp(par_mat_SP500[4,]) - exp(par_mat_SP500[4,])),type = "l", col = "green")
 points(exp(par_mat_SP500[3,])/sqrt(2)*sqrt(1/exp(par_mat_SP500[4,])^2 + exp(par_mat_SP500[4,])^2),type = "l", col = "red")
-points(par_mat_SP500[2,] + exp(par_mat_SP500[3,])/sqrt(2)*(1/exp(par_mat_SP500[4,]) - exp(par_mat_SP500[4,])) + 
-         (exp(par_mat_SP500[3,])/sqrt(2)*sqrt(1/exp(par_mat_SP500[4,])^2 + exp(par_mat_SP500[4,])^2))*qalaplace(0.05),type = "l", col = "red")
-
+points(qalaplace(0.05, par_mat_SP500[2,], exp(par_mat_SP500[3,]), exp(par_mat_SP500[4,])),type = "l", col = "red")
 ################################################################################
 
 pocet_dat <- length(gold_data)
@@ -125,7 +123,7 @@ pocet_dat <- length(gold_data)
 par_mat_gold <- c()
 
 for (i in 0:11) {
-  
+  print(i)
   opt_data <- 1:504 + i * okno
   
   opt_fun <- function(x){
@@ -233,8 +231,7 @@ for (i in 0:11) {
 plot(par_mat_gold[1,],type = "l")
 points(par_mat_gold[2,] + exp(par_mat_gold[3,])/sqrt(2)*(1/exp(par_mat_gold[4,]) - exp(par_mat_gold[4,])),type = "l", col = "green")
 points(exp(par_mat_gold[3,])/sqrt(2)*sqrt(1/exp(par_mat_gold[4,])^2 + exp(par_mat_gold[4,])^2),type = "l", col = "red")
-points(par_mat_gold[2,] + exp(par_mat_gold[3,])/sqrt(2)*(1/exp(par_mat_gold[4,]) - exp(par_mat_gold[4,]))+
-         (exp(par_mat_gold[3,])/sqrt(2)*sqrt(1/exp(par_mat_gold[4,])^2 + exp(par_mat_gold[4,])^2))*qalaplace(0.05),type = "l", col = "red")
+points(qalaplace(0.05, par_mat_gold[2,], exp(par_mat_gold[3,]), exp(par_mat_gold[4,])),type = "l", col = "red")
 
 ################################################################################
 
@@ -243,7 +240,7 @@ pocet_dat <- length(btc_data)
 par_mat_btc <- c()
 
 for (i in 0:20) {
-  
+  print(i)
   opt_data <- 1:504 + i * okno
   
   opt_fun <- function(x){
@@ -351,8 +348,7 @@ for (i in 0:20) {
 plot(par_mat_btc[1,],type = "l")
 points(par_mat_btc[2,] + exp(par_mat_btc[3,])/sqrt(2)*(1/exp(par_mat_btc[4,]) - exp(par_mat_btc[4,])),type = "l", col = "green")
 points(exp(par_mat_btc[3,])/sqrt(2)*sqrt(1/exp(par_mat_btc[4,])^2 + exp(par_mat_btc[4,])^2),type = "l", col = "red")
-points(par_mat_btc[2,] + exp(par_mat_btc[3,])/sqrt(2)*(1/exp(par_mat_btc[4,]) - exp(par_mat_btc[4,]))+
-         (exp(par_mat_btc[3,])/sqrt(2)*sqrt(1/exp(par_mat_btc[4,])^2 + exp(par_mat_btc[4,])^2))*qalaplace(0.05),type = "l", col = "red")
+points(qalaplace(0.05, par_mat_btc[2,], exp(par_mat_btc[3,]), exp(par_mat_btc[4,])),type = "l", col = "red")
 
 ################################################################################
 
@@ -361,7 +357,7 @@ pocet_dat <- length(eurusd_data)
 par_mat_eurusd <- c()
 
 for (i in 0:12) {
-  
+  print(i)
   opt_data <- 1:504 + i * okno
   
   opt_fun <- function(x){
@@ -469,8 +465,7 @@ for (i in 0:12) {
 plot(par_mat_eurusd[1,],type = "l")
 points(par_mat_eurusd[2,] + exp(par_mat_eurusd[3,])/sqrt(2)*(1/exp(par_mat_eurusd[4,]) - exp(par_mat_eurusd[4,])),type = "l", col = "green")
 points(exp(par_mat_eurusd[3,])/sqrt(2)*sqrt(1/exp(par_mat_eurusd[4,])^2 + exp(par_mat_eurusd[4,])^2),type = "l", col = "red")
-points(par_mat_eurusd[2,] + exp(par_mat_eurusd[3,])/sqrt(2)*(1/exp(par_mat_eurusd[4,]) - exp(par_mat_eurusd[4,]))+
-         (exp(par_mat_eurusd[3,])/sqrt(2)*sqrt(1/exp(par_mat_eurusd[4,])^2 + exp(par_mat_eurusd[4,])^2))*qalaplace(0.05),type = "l", col = "red")
+points(qalaplace(0.05, par_mat_eurusd[2,], exp(par_mat_eurusd[3,]), exp(par_mat_eurusd[4,])),type = "l", col = "red")
 
 ###############################################################################
 
@@ -479,7 +474,7 @@ pocet_dat <- length(bonds_data)
 par_mat_bonds <- c()
 
 for (i in 0:11) {
-  
+  print(i)
   opt_data <- 1:504 + i * okno
   
   opt_fun <- function(x){
@@ -587,11 +582,10 @@ for (i in 0:11) {
 plot(par_mat_bonds[1,],type = "l")
 points(par_mat_bonds[2,] + exp(par_mat_bonds[3,])/sqrt(2)*(1/exp(par_mat_bonds[4,]) - exp(par_mat_bonds[4,])),type = "l", col = "green")
 points(exp(par_mat_bonds[3,])/sqrt(2)*sqrt(1/exp(par_mat_bonds[4,])^2 + exp(par_mat_bonds[4,])^2),type = "l", col = "red")
-points(par_mat_bonds[2,] + exp(par_mat_bonds[3,])/sqrt(2)*(1/exp(par_mat_bonds[4,]) - exp(par_mat_bonds[4,]))+
-         (exp(par_mat_bonds[3,])/sqrt(2)*sqrt(1/exp(par_mat_bonds[4,])^2 + exp(par_mat_bonds[4,])^2))*qalaplace(0.05),type = "l", col = "red")
+points(qalaplace(0.05, par_mat_bonds[2,], exp(par_mat_bonds[3,]), exp(par_mat_bonds[4,])),type = "l", col = "red")
 
 ################################################################################
 
 save(par_mat_SP500, par_mat_gold, par_mat_btc, par_mat_eurusd, par_mat_bonds, file = "opt_Laplace_A.RData")
 
-load("opt_Laplace_A.RData")
+
